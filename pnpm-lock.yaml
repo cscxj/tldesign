@@ -80,7 +80,10 @@ importers:
     specifiers: {}
 
   packages/tldesign:
-    specifiers: {}
+    specifiers:
+      '@tldesign/core': workspace:*
+    dependencies:
+      '@tldesign/core': link:../core
 
 packages:
 
