@@ -2,9 +2,9 @@ import { SVGContainer, TLShapeUtil } from '@tldesign/core'
 import type { RectShape } from './RectShape'
 
 export const RectComponent = TLShapeUtil.Component<RectShape, SVGSVGElement>(
-  ({ shape }, ref) => {
+  ({ shape, events }, ref) => {
     return (
-      <SVGContainer ref={ref}>
+      <SVGContainer ref={ref} {...events}>
         <rect
           width={shape.bounds.width}
           height={shape.bounds.height}

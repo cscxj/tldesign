@@ -1,5 +1,6 @@
 import { IRendererContext, RendererContext } from '@/hooks/useRendererContext'
 import { useStyle } from '@/hooks/useStyle'
+import { Inputs } from '@/inputs'
 import { TLShapeUtilsMap } from '@/TLShapeUtil'
 import { TLEvents, TLPage, TLPageState, TLShape } from '@/types'
 import { useState } from 'react'
@@ -24,7 +25,8 @@ export const Renderer = <S extends TLShape>({
   const [context] = useState<IRendererContext>({
     id,
     shapeUtils: shapeUtils as unknown as TLShapeUtilsMap<TLShape>,
-    events: rest
+    events: rest,
+    inputs: new Inputs()
   })
 
   return (

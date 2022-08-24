@@ -43,6 +43,7 @@ export interface TLPageState {
 
 export interface TLComponentProps<S extends TLShape> {
   shape: S
+  events: TLShapeEvents
 }
 
 export interface TLPointerInfo<T extends string> {
@@ -91,6 +92,14 @@ export interface TLEvents {
   // Keyboard
   onKeyDown: TLKeyboardEventHandler
   onKeyUp: TLKeyboardEventHandler
+}
+
+export interface TLShapeEvents<E = any> {
+  onPointerDown: (e: React.PointerEvent<E>) => void
+  onPointerUp: (e: React.PointerEvent<E>) => void
+  onPointerEnter: (e: React.PointerEvent<E>) => void
+  onPointerMove: (e: React.PointerEvent<E>) => void
+  onPointerLeave: (e: React.PointerEvent<E>) => void
 }
 
 export type TLForwardedRef<E> =
