@@ -14,11 +14,6 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true
-    },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
     tsconfigRootDir: __dirname,
     project: [
       'tsconfig.eslint.json',
@@ -26,7 +21,8 @@ module.exports = {
       './packages/*/tsconfig.*.json',
       './apps/*/tsconfig.json',
       './apps/*/tsconfig.*.json'
-    ]
+    ],
+    EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true
   },
   rules: {
     'prettier/prettier': 'error',
