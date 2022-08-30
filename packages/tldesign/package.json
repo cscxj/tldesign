@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@stitches/react": "^1.2.8",
     "@tldesign/core": "workspace:*",
     "zustand": "^4.1.1"
   }

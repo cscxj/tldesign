@@ -36,6 +36,10 @@ export interface TLPage<S extends TLShape = TLShape> {
 export interface TLPageState {
   id: string
   selectedIds: string[]
+  camera: {
+    point: Point
+    zoom: number
+  }
   pointedId?: string | null
   hoveredId?: string | null
   editingId?: string | null
@@ -76,7 +80,7 @@ export type TLKeyboardEventHandler = (info: TLKeyboardInfo) => void
 
 export interface TLEvents {
   // Shape
-  onPointerShape: TLPointerEventHandler
+  onPointShape: TLPointerEventHandler
   onHoverShape: TLPointerEventHandler
   onUnHoverShape: TLPointerEventHandler
   onDragShape: TLPointerEventHandler

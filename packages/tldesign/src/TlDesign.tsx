@@ -9,9 +9,9 @@ export function TlDesign() {
 
   const state = app.useStore()
 
-  const { document, runtime } = state
+  const { document, appState } = state
 
-  const page = document.pages[runtime.currentPageId]
+  const page = document.pages[appState.currentPageId]
   const pageState = document.pageStates[page.id]
 
   return (
@@ -20,6 +20,9 @@ export function TlDesign() {
         shapeUtils={shapeUtils}
         page={page}
         pageState={pageState}
+        onPointShape={app.onPointShape}
+        onHoverShape={app.onHoverShape}
+        onUnHoverShape={app.onUnHoverShape}
       ></Renderer>
     </TlDesignContext.Provider>
   )

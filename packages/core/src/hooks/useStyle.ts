@@ -38,6 +38,7 @@ const TLCSS = css`
     align-items: center;
     justify-content: center;
     contain: layout style size;
+    pointer-events: none;
   }
 
   .tl-svg-container {

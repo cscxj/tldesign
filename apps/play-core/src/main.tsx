@@ -33,7 +33,11 @@ const page: TLPage<Shape> = {
 
 const pageState: TLPageState = {
   id: 'page1',
-  selectedIds: []
+  selectedIds: [],
+  camera: {
+    point: [0, 0],
+    zoom: 1
+  }
 }
 
 const shapeUtils: TLShapeUtilsMap<Shape> = {

@@ -14,7 +14,7 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
           return
         }
         e.currentTarget.setPointerCapture(e.pointerId)
-        events.onPointerShape?.(info)
+        events.onPointShape?.(info)
         events.onPointerDown?.(info)
       },
       onPointerUp(e) {

@@ -83,9 +83,11 @@ importers:
 
   packages/tldesign:
     specifiers:
+      '@stitches/react': ^1.2.8
       '@tldesign/core': workspace:*
       zustand: ^4.1.1
     dependencies:
+      '@stitches/react': 1.2.8
       '@tldesign/core': link:../core
       zustand: 4.1.1
 
@@ -637,6 +639,12 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
     dev: true
+
+  /@stitches/react/1.2.8:
+    resolution: {integrity: sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==}
+    peerDependencies:
+      react: '>= 16.3.0'
+    dev: false
 
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}

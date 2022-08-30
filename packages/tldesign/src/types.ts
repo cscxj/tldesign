@@ -25,7 +25,7 @@ export type TDShape = ImageShape | TextShape
 
 // page
 
-type TDPage = TLPage<TDShape>
+export type TDPage = TLPage<TDShape>
 
 // document
 
@@ -39,9 +39,11 @@ export interface TDDocument {
 
 // app state
 
-export interface TDAppState {
-  runtime: {
+export interface TDSnapshot {
+  appState: {
     currentPageId: string
   }
   document: TDDocument
 }
+
+export type Patch<T> = Partial<{ [P in keyof T]: Patch<T[P]> }>
