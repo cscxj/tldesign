@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tldesign/core": "workspace:*"
+    "@tldesign/core": "workspace:*",
+    "zustand": "^4.1.1"
   }
 }

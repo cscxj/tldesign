@@ -22,6 +22,11 @@ const TLCSS = css`
     padding: 0;
     margin: 0;
     background-color: var(--tl-canvas-background);
+    box-sizing: border-box;
+  }
+
+  .tl-canvas * {
+    box-sizing: border-box;
   }
 
   .tl-container {
