@@ -20,11 +20,19 @@ export function TlDesign() {
         shapeUtils={shapeUtils}
         page={page}
         pageState={pageState}
+        // pointer
+        onPointerUp={app.onPointerUp}
+        // shape
         onPointShape={app.onPointShape}
         onHoverShape={app.onHoverShape}
         onUnHoverShape={app.onUnHoverShape}
+        // bounds
+        onPointBounds={app.onPointBounds}
+        onReleaseBounds={app.onReleaseBounds}
+        // canvas
         onPointCanvas={app.onPointCanvas}
       ></Renderer>
+      <div>{appState.status}</div>
     </TlDesignContext.Provider>
   )
 }

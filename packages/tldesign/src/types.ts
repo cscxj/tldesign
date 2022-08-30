@@ -7,6 +7,11 @@ export enum TDShapeType {
   Text = 'text'
 }
 
+export enum Status {
+  Idle = 'idle',
+  PointingBounds = 'pointing_bounds'
+}
+
 export interface TDBaseShape extends TLShape {
   type: TDShapeType
 }
@@ -42,6 +47,7 @@ export interface TDDocument {
 export interface TDSnapshot {
   appState: {
     currentPageId: string
+    status: Status
   }
   document: TDDocument
 }

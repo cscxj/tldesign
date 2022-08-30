@@ -3,6 +3,7 @@ import { useSelection } from '@/hooks/useSelection'
 import { useShapeTree } from '@/hooks/useShapeTree'
 import { TLPage, TLPageState } from '@/types'
 import { Bounds } from '../Bounds'
+import { BoundsBg } from '../Bounds/BoundsBg'
 import { ShapeIndicator } from '../ShapeIndicator'
 import { ShapeNode } from '../ShapeNode'
 
@@ -22,14 +23,15 @@ export const Page = ({ page, pageState }: PageProps) => {
 
   return (
     <>
+      {bounds && <BoundsBg bounds={bounds} />}
       {shapeTree.map((node) => (
         <ShapeNode key={node.shape.id} utils={shapeUtils} {...node}></ShapeNode>
       ))}
-      {bounds && <Bounds bounds={bounds}></Bounds>}
       {selectShapes.map((shape) => (
         <ShapeIndicator shape={shape} key={'selected_' + shape.id} />
       ))}
       {hoveredId && <ShapeIndicator shape={page.shapes[hoveredId]} />}
+      {bounds && <Bounds bounds={bounds} />}
     </>
   )
 }

@@ -1,11 +1,19 @@
 import {
   Point,
+  TLBoundsEventHandler,
   TLCanvasEventHandler,
   TLPageState,
   TLPointerEventHandler
 } from '@tldesign/core'
 import { StateManager } from './StateManager/StateManager'
-import { TDShapeType, TDSnapshot, TDDocument, TDShape, TDPage } from './types'
+import {
+  TDShapeType,
+  TDSnapshot,
+  TDDocument,
+  TDShape,
+  TDPage,
+  Status
+} from './types'
 import { Snapshot, Vec } from './utils'
 
 export class TlDesignApp extends StateManager<TDSnapshot> {
@@ -94,6 +102,21 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   /**
+   * 设置当前状态
+   * @param status
+   * @private
+   * @returns
+   */
+  setStatus(status: Status) {
+    return this.patchState(
+      {
+        appState: { status }
+      },
+      `set_status:${status}`
+    )
+  }
+
+  /**
    * 选择图形
    * @param ids
    * @returns
@@ -159,6 +182,11 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     }
   }
 
+  // pointer events
+  onPointerUp: TLPointerEventHandler = () => {
+    this.setStatus(Status.Idle)
+  }
+  // shape events
   onPointShape: TLPointerEventHandler = (info) => {
     this.originPoint = this.getPagePoint(info.point)
     this.select(info.target)
@@ -176,13 +204,22 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     })
   }
 
+  onPointBounds: TLBoundsEventHandler = () => {
+    this.setStatus(Status.PointingBounds)
+  }
+
+  onReleaseBounds: TLBoundsEventHandler = () => {
+    this.setStatus(Status.Idle)
+  }
+
   onPointCanvas: TLCanvasEventHandler = () => {
     this.selectNone()
   }
 
   static defaultState: TDSnapshot = {
     appState: {
-      currentPageId: 'page1'
+      currentPageId: 'page1',
+      status: Status.Idle
     },
     document: TlDesignApp.defaultDocument
   }

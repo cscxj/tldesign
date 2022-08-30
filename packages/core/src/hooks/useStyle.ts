@@ -66,6 +66,13 @@ const TLCSS = css`
     width: 100%;
     height: 100%;
   }
+
+  .tl-bounds-bg {
+    stroke: none;
+    fill: pink;
+    pointer-events: all;
+    contain: layout style size;
+  }
 `
 
 export function useStyle(rules: string = TLCSS) {
