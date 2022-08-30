@@ -1,6 +1,6 @@
 import { Point, TLPageState, TLPointerEventHandler } from '@tldesign/core'
 import { StateManager } from './StateManager/StateManager'
-import { TDShapeType, TDSnapshot, TDDocument, TDShape } from './types'
+import { TDShapeType, TDSnapshot, TDDocument, TDShape, TDPage } from './types'
 import { Snapshot, Vec } from './utils'
 
 export class TlDesignApp extends StateManager<TDSnapshot> {
@@ -16,6 +16,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   get pageState(): TLPageState {
     return this.state.document.pageStates[this.currentPageId]
+  }
+
+  get page(): TDPage {
+    return this.state.document.pages[this.currentPageId]
   }
 
   /**
@@ -62,6 +66,38 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     )
   }
 
+  /**
+   * 设置当前选择
+   * @param ids
+   * @param push
+   * @returns
+   */
+  private setSelectedIds = (ids: string[], push = false): this => {
+    const nextIds = push ? [...this.pageState.selectedIds, ...ids] : [...ids]
+    return this.patchState(
+      {
+        document: {
+          pageStates: {
+            [this.currentPageId]: {
+              selectedIds: nextIds
+            }
+          }
+        }
+      },
+      `selected`
+    )
+  }
+
+  select(...ids: string[]): this {
+    ids.forEach((id) => {
+      if (!this.page.shapes[id]) {
+        throw Error(`That shape does not exist on page ${this.currentPageId}`)
+      }
+    })
+    this.setSelectedIds(ids)
+    return this
+  }
+
   static version = 1.0
 
   static defaultDocument: TDDocument = {
@@ -106,6 +142,7 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   onPointShape: TLPointerEventHandler = (info) => {
     this.originPoint = this.getPagePoint(info.point)
+    this.select(info.target)
   }
 
   onHoverShape: TLPointerEventHandler = (info) => {
