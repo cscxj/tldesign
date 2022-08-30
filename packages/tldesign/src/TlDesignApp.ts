@@ -1,4 +1,9 @@
-import { Point, TLPageState, TLPointerEventHandler } from '@tldesign/core'
+import {
+  Point,
+  TLCanvasEventHandler,
+  TLPageState,
+  TLPointerEventHandler
+} from '@tldesign/core'
 import { StateManager } from './StateManager/StateManager'
 import { TDShapeType, TDSnapshot, TDDocument, TDShape, TDPage } from './types'
 import { Snapshot, Vec } from './utils'
@@ -88,6 +93,11 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     )
   }
 
+  /**
+   * 选择图形
+   * @param ids
+   * @returns
+   */
   select(...ids: string[]): this {
     ids.forEach((id) => {
       if (!this.page.shapes[id]) {
@@ -95,6 +105,15 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
       }
     })
     this.setSelectedIds(ids)
+    return this
+  }
+
+  /**
+   * 清空选择
+   * @returns
+   */
+  selectNone = (): this => {
+    this.setSelectedIds([])
     return this
   }
 
@@ -155,6 +174,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
         this.setHoveredId(undefined)
       }
     })
+  }
+
+  onPointCanvas: TLCanvasEventHandler = () => {
+    this.selectNone()
   }
 
   static defaultState: TDSnapshot = {

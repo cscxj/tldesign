@@ -75,8 +75,10 @@ export interface TLKeyboardInfo {
 }
 
 export type TLPointerEventHandler = (info: TLPointerInfo<string>) => void
+export type TLCanvasEventHandler = (info: TLPointerInfo<'canvas'>) => void
 
 export type TLKeyboardEventHandler = (info: TLKeyboardInfo) => void
+export type TLDropEventHandler = (e: React.DragEvent<Element>) => void
 
 export interface TLEvents {
   // Shape
@@ -87,6 +89,15 @@ export interface TLEvents {
   onReleaseShape: TLPointerEventHandler
   onDoubleClickShape: TLPointerEventHandler
   onRightPointShape: TLPointerEventHandler
+
+  // canvas
+  onPointCanvas: TLCanvasEventHandler
+  onDoubleClickCanvas: TLCanvasEventHandler
+  onRightPointCanvas: TLCanvasEventHandler
+  onDragCanvas: TLCanvasEventHandler
+  onReleaseCanvas: TLCanvasEventHandler
+  onDragOver: TLDropEventHandler
+  onDrop: TLDropEventHandler
 
   // pointer
   onPointerDown: TLPointerEventHandler

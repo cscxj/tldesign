@@ -1,3 +1,4 @@
+import { useCanvasEvents } from '@/hooks/useCanvasEvents'
 import { TLPage, TLPageState } from '@/types'
 import { Page } from '../Page/Page'
 
@@ -7,11 +8,11 @@ interface CanvasProps {
   pageState: TLPageState
 }
 
-export const Canvas = ({ id, page, pageState }: CanvasProps) => {
-  console.log(id)
+export const Canvas = ({ page, pageState }: CanvasProps) => {
+  const events = useCanvasEvents()
 
   return (
-    <div className="tl-canvas">
+    <div className="tl-canvas" {...events}>
       <Page page={page} pageState={pageState}></Page>
     </div>
   )

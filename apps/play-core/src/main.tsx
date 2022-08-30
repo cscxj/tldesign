@@ -1,12 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  Renderer,
-  TLPage,
-  TLPageState,
-  TLPointerInfo,
-  TLShapeUtilsMap
-} from '@tldesign/core'
+import { Renderer, TLPage, TLPageState, TLShapeUtilsMap } from '@tldesign/core'
 import { RectUtil, Shape } from './shapes'
 import './index.css'
 
@@ -44,14 +38,9 @@ const shapeUtils: TLShapeUtilsMap<Shape> = {
   rect: new RectUtil()
 }
 
-function onPointerDown(info: TLPointerInfo<string>) {
-  console.log(info)
-}
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Renderer
-      onPointerDown={onPointerDown}
       page={page}
       pageState={pageState}
       shapeUtils={shapeUtils}

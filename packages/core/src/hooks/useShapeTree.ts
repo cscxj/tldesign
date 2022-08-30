@@ -27,9 +27,6 @@ export function useShapeTree(
   page: TLPage,
   pageState: TLPageState
 ): IShapeTreeNode[] {
-  // todo with State
-  console.log(page, pageState)
-
   const allShapes = Object.values(page.shapes)
   const rootShapes = new Set<TLShape>()
 

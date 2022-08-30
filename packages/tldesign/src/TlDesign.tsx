@@ -23,6 +23,7 @@ export function TlDesign() {
         onPointShape={app.onPointShape}
         onHoverShape={app.onHoverShape}
         onUnHoverShape={app.onUnHoverShape}
+        onPointCanvas={app.onPointCanvas}
       ></Renderer>
     </TlDesignContext.Provider>
   )
