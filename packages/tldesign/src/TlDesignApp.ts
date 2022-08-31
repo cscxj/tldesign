@@ -6,7 +6,7 @@ import {
   TLPointerEventHandler
 } from '@tldesign/core'
 import { DEAD_ZONE } from './constance'
-import { getSession } from './sessions'
+import { getSession, TDSession } from './sessions'
 import { getShapeUtil } from './shapes'
 import { StateManager } from './StateManager/StateManager'
 import {
@@ -16,7 +16,6 @@ import {
   TDShape,
   TDPage,
   TDStatus,
-  TDSession,
   SessionType
 } from './types'
 import { Snapshot, Vec } from './utils'
@@ -44,6 +43,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   constructor() {
     super(TlDesignApp.defaultState)
+  }
+
+  get appState(): TDSnapshot['appState'] {
+    return this.state.appState
+  }
+
+  get status() {
+    return this.appState.status
   }
 
   get currentPageId(): string {
@@ -246,8 +253,17 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
         this.updateSession()
       } else {
         if (Vec.dist(this.originPoint, this.currentPoint) > DEAD_ZONE) {
-          this.startSession(SessionType.Brush)
-          this.setStatus(TDStatus.Brushing)
+          switch (this.status) {
+            case TDStatus.PointingCanvas: {
+              this.startSession(SessionType.Brush)
+              this.setStatus(TDStatus.Brushing)
+              break
+            }
+            case TDStatus.PointingBounds: {
+              this.startSession(SessionType.Translate)
+              this.setStatus(TDStatus.Translating)
+            }
+          }
         }
       }
     }
@@ -270,6 +286,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     })
   }
 
+  // bound events
+
   onPointBounds: TLBoundsEventHandler = () => {
     this.setStatus(TDStatus.PointingBounds)
   }
@@ -278,8 +296,12 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     this.setStatus(TDStatus.Idle)
   }
 
-  onPointCanvas: TLCanvasEventHandler = () => {
+  // canvas events
+
+  onPointCanvas: TLCanvasEventHandler = (info) => {
+    this.updateInputs(info)
     this.selectNone()
+    this.setStatus(TDStatus.PointingCanvas)
   }
 
   /** ---------------------- session start ------------------------------ */

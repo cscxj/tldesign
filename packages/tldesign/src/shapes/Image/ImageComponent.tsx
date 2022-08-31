@@ -22,6 +22,7 @@ export const ImageComponent = TLShapeUtil.Component<ImageShape, HTMLDivElement>(
             width={shape.bounds.width}
             height={shape.bounds.height}
             src={shape.assetId}
+            draggable={false}
           />
         </Wrapper>
       </HtmlContainer>

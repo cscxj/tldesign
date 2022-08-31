@@ -69,3 +69,11 @@ export function mul(A: Point, n: number): Point {
 export function dist(A: Point, B: Point): number {
   return Math.hypot(A[1] - B[1], A[0] - B[0])
 }
+
+/**
+ * Round a vector to two decimal places.
+ * @param a
+ */
+export function toFixed(a: Point): Point {
+  return a.map((v) => Math.round(v * 100) / 100) as Point
+}

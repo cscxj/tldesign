@@ -9,7 +9,7 @@ export const HtmlContainer = React.forwardRef<
   HTMLContainerProps
 >(function HtmlContainer({ children, ...rest }, ref) {
   return (
-    <div className="tl-html-container" ref={ref} {...rest}>
+    <div className="tl-html-container" draggable={false} ref={ref} {...rest}>
       <div className="tl-inner-div">{children}</div>
     </div>
   )

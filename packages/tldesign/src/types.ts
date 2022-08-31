@@ -1,5 +1,4 @@
 import { TLPage, TLPageState, TLShape } from '@tldesign/core'
-import { BrushSession } from './sessions/BrushSession/BrushSession'
 
 // shapes
 
@@ -9,13 +8,16 @@ export enum TDShapeType {
 }
 
 export enum SessionType {
-  Brush = 'brush'
+  Brush = 'brush',
+  Translate = 'translate'
 }
 
 export enum TDStatus {
   Idle = 'idle',
   PointingBounds = 'pointing_bounds',
-  Brushing = 'brushing'
+  PointingCanvas = 'pointing_canvas',
+  Brushing = 'brushing',
+  Translating = 'translating'
 }
 
 export interface TDBaseShape extends TLShape {
@@ -69,5 +71,3 @@ export interface Command<T extends { [key: string]: any }> {
 }
 
 export type TlDesignCommand = Command<TDSnapshot>
-
-export type TDSession = BrushSession
