@@ -1,4 +1,5 @@
-export type Point = [x: number, y: number]
+import type { Point } from '@tldesign/vec'
+export { Point }
 
 export enum TLScaleHandle {
   Left = 1, // 0b0001

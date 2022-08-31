@@ -79,17 +79,30 @@ importers:
       vite: 3.0.7
 
   packages/core:
-    specifiers: {}
+    specifiers:
+      '@tldesign/intersect': workspace:*
+      '@tldesign/vec': workspace:*
+    dependencies:
+      '@tldesign/intersect': link:../intersect
+      '@tldesign/vec': link:../vec
+
+  packages/intersect:
+    specifiers:
+      '@tldesign/vec': workspace:*
+    dependencies:
+      '@tldesign/vec': link:../vec
 
   packages/tldesign:
     specifiers:
       '@stitches/react': ^1.2.8
       '@tldesign/core': workspace:*
+      '@tldesign/intersect': workspace:*
       '@tldesign/vec': workspace:*
       zustand: ^4.1.1
     dependencies:
       '@stitches/react': 1.2.8
       '@tldesign/core': link:../core
+      '@tldesign/intersect': link:../intersect
       '@tldesign/vec': link:../vec
       zustand: 4.1.1
 

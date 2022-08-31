@@ -22,5 +22,9 @@
     }
   },
   "include": ["src"],
-  "references": [{ "path": "../core" }]
+  "references": [
+    { "path": "../core" },
+    { "path": "../vec" },
+    { "path": "../intersect" }
+  ]
 }
