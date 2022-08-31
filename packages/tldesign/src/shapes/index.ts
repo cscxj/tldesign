@@ -1,12 +1,16 @@
 import { TDShape, TDShapeType } from '@/types'
-import { TLShapeUtilsMap } from '@tldesign/core'
 import { ImageUtil } from './Image'
+import { TDShapeUtil } from './TDShapeUtil'
 import { TextUtil } from './Text'
 
 export const Image = new ImageUtil()
 export const Text = new TextUtil()
 
-export const shapeUtils: TLShapeUtilsMap<TDShape> = {
+export type TDShapeUtilsMap = {
+  [key in TDShape['type']]: TDShapeUtil<Extract<TDShape, { type: key }>>
+}
+
+export const shapeUtils: TDShapeUtilsMap = {
   [TDShapeType.Image]: Image,
   [TDShapeType.Text]: Text
 }

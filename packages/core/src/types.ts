@@ -1,15 +1,12 @@
-export interface Point {
-  0: number
-  1: number
-}
+export type Point = [x: number, y: number]
 
 export interface TLBounds {
   x: number
   y: number
   width: number
   height: number
-  rotation: number
-  skew: number
+  rotation?: number
+  skew?: number
 }
 
 export interface TLShape {
@@ -40,6 +37,7 @@ export interface TLPageState {
     point: Point
     zoom: number
   }
+  brush?: TLBounds | null
   pointedId?: string | null
   hoveredId?: string | null
   editingId?: string | null

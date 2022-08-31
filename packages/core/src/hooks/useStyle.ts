@@ -73,6 +73,14 @@ const TLCSS = css`
     pointer-events: all;
     contain: layout style size;
   }
+
+  .tl-brush {
+    fill: #ff000022;
+    stroke: #ff0000;
+    stroke-width: calc(1px * var(--tl-scale));
+    pointer-events: none;
+    contain: layout style size;
+  }
 `
 
 export function useStyle(rules: string = TLCSS) {

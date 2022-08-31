@@ -5,6 +5,9 @@ import {
   TLPageState,
   TLPointerEventHandler
 } from '@tldesign/core'
+import { DEAD_ZONE } from './constance'
+import { getSession } from './sessions'
+import { getShapeUtil } from './shapes'
 import { StateManager } from './StateManager/StateManager'
 import {
   TDShapeType,
@@ -12,12 +15,32 @@ import {
   TDDocument,
   TDShape,
   TDPage,
-  Status
+  TDStatus,
+  TDSession,
+  SessionType
 } from './types'
 import { Snapshot, Vec } from './utils'
 
 export class TlDesignApp extends StateManager<TDSnapshot> {
+  session?: TDSession
+  /**
+   * 鼠标按下时的位置
+   */
   originPoint: Point = [0, 0]
+  /**
+   * 鼠标当前位置
+   */
+  currentPoint: Point = [0, 0]
+  /**
+   * 是否按下鼠标
+   */
+  isPointing = false
+
+  shiftKey = false
+  altKey = false
+  metaKey = false
+  ctrlKey = false
+  spaceKey = false
 
   constructor() {
     super(TlDesignApp.defaultState)
@@ -33,6 +56,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   get page(): TDPage {
     return this.state.document.pages[this.currentPageId]
+  }
+
+  get selectedIds(): string[] {
+    return this.pageState.selectedIds
+  }
+
+  get shapes(): TDShape[] {
+    return Object.values(this.page.shapes)
   }
 
   /**
@@ -54,6 +85,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     pageId = this.currentPageId
   ) {
     return Snapshot.getShape<T>(this.state, shapeId, pageId)
+  }
+
+  getShapeUtil<T extends TDShape>(shape: T) {
+    return getShapeUtil<T>(shape)
   }
 
   /**
@@ -107,7 +142,7 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
    * @private
    * @returns
    */
-  setStatus(status: Status) {
+  setStatus(status: TDStatus) {
     return this.patchState(
       {
         appState: { status }
@@ -183,12 +218,43 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   // pointer events
-  onPointerUp: TLPointerEventHandler = () => {
-    this.setStatus(Status.Idle)
+
+  updateInputs: TLPointerEventHandler = (info) => {
+    this.currentPoint = this.getPagePoint(info.point)
+    this.shiftKey = info.shiftKey
+    this.altKey = info.altKey
+    this.ctrlKey = info.ctrlKey
+    this.metaKey = info.metaKey
   }
+
+  onPointerDown: TLPointerEventHandler = (info) => {
+    this.isPointing = true
+    this.originPoint = this.getPagePoint(info.point)
+  }
+
+  onPointerUp: TLPointerEventHandler = () => {
+    this.isPointing = false
+    this.setStatus(TDStatus.Idle)
+    this.completeSession()
+  }
+
+  onPointerMove: TLPointerEventHandler = (info) => {
+    this.updateInputs(info)
+
+    if (this.isPointing) {
+      if (this.session) {
+        this.updateSession()
+      } else {
+        if (Vec.dist(this.originPoint, this.currentPoint) > DEAD_ZONE) {
+          this.startSession(SessionType.Brush)
+          this.setStatus(TDStatus.Brushing)
+        }
+      }
+    }
+  }
+
   // shape events
   onPointShape: TLPointerEventHandler = (info) => {
-    this.originPoint = this.getPagePoint(info.point)
     this.select(info.target)
   }
 
@@ -205,21 +271,73 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   onPointBounds: TLBoundsEventHandler = () => {
-    this.setStatus(Status.PointingBounds)
+    this.setStatus(TDStatus.PointingBounds)
   }
 
   onReleaseBounds: TLBoundsEventHandler = () => {
-    this.setStatus(Status.Idle)
+    this.setStatus(TDStatus.Idle)
   }
 
   onPointCanvas: TLCanvasEventHandler = () => {
     this.selectNone()
   }
 
+  /** ---------------------- session start ------------------------------ */
+  startSession<T extends SessionType>(type: T): this {
+    const Session = getSession(type)
+    this.session = new Session(this)
+
+    const result = this.session.start()
+    if (result) {
+      this.patchState(result, `session:start_${this.session!.constructor.name}`)
+    }
+    return this
+  }
+
+  updateSession(): this {
+    const { session } = this
+    if (!session) return this
+
+    const patch = session.update()
+
+    if (!patch) return this
+    return this.patchState(patch, `session:${session?.constructor.name}`)
+  }
+
+  cancelSession(): this {
+    const { session } = this
+    if (!session) return this
+    this.session = undefined
+
+    const result = session.cancel()
+
+    if (result) {
+      this.patchState(result, `session:cancel:${session.constructor.name}`)
+    }
+    return this
+  }
+
+  completeSession(): this {
+    const { session } = this
+
+    if (!session) return this
+
+    this.session = undefined
+    const result = session.complete()
+
+    if (result) {
+      this.patchState(result, `session:complete:${session.constructor.name}`)
+    }
+
+    return this
+  }
+
+  /** ---------------------- session end ------------------------------ */
+
   static defaultState: TDSnapshot = {
     appState: {
       currentPageId: 'page1',
-      status: Status.Idle
+      status: TDStatus.Idle
     },
     document: TlDesignApp.defaultDocument
   }

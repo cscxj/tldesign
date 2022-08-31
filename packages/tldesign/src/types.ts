@@ -1,4 +1,5 @@
 import { TLPage, TLPageState, TLShape } from '@tldesign/core'
+import { BrushSession } from './sessions/BrushSession/BrushSession'
 
 // shapes
 
@@ -7,9 +8,14 @@ export enum TDShapeType {
   Text = 'text'
 }
 
-export enum Status {
+export enum SessionType {
+  Brush = 'brush'
+}
+
+export enum TDStatus {
   Idle = 'idle',
-  PointingBounds = 'pointing_bounds'
+  PointingBounds = 'pointing_bounds',
+  Brushing = 'brushing'
 }
 
 export interface TDBaseShape extends TLShape {
@@ -47,9 +53,21 @@ export interface TDDocument {
 export interface TDSnapshot {
   appState: {
     currentPageId: string
-    status: Status
+    status: TDStatus
   }
   document: TDDocument
 }
 
 export type Patch<T> = Partial<{ [P in keyof T]: Patch<T[P]> }>
+
+export type TlDesignPatch = Patch<TDSnapshot>
+
+export interface Command<T extends { [key: string]: any }> {
+  id?: string
+  before: Patch<T>
+  after: Patch<T>
+}
+
+export type TlDesignCommand = Command<TDSnapshot>
+
+export type TDSession = BrushSession

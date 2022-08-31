@@ -7,6 +7,8 @@ export function useBoundsEvents() {
   return React.useMemo(() => {
     return {
       onPointerDown: (e: React.PointerEvent) => {
+        if (e.dead) return
+        else e.dead = true
         if (e.button === 2) {
           events.onRightPointBounds?.(inputs.pointerDown(e, 'bounds'))
           return
@@ -18,6 +20,8 @@ export function useBoundsEvents() {
         events.onPointerDown?.(info)
       },
       onPointerUp: (e: React.PointerEvent) => {
+        if (e.dead) return
+        else e.dead = true
         if (e.button !== 0) return
         inputs.activePointer = undefined
         const isDoubleClick = inputs.isDoubleClick()
@@ -32,6 +36,8 @@ export function useBoundsEvents() {
         events.onPointerUp?.(info)
       },
       onPointerMove: (e: React.PointerEvent) => {
+        if (e.dead) return
+        else e.dead = true
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           events.onDragBounds?.(inputs.pointerMove(e, 'bounds'))
         }

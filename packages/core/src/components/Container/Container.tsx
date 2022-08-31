@@ -15,7 +15,7 @@ export const Container = ({ children, bounds }: ContainerProps) => {
             calc(${bounds.x}px - var(--tl-padding)),
             calc(${bounds.y}px - var(--tl-padding))
         )
-        rotate(${bounds.rotation}rad)
+        rotate(${bounds.rotation || 0}rad)
     `
     el.style.setProperty('transform', transform)
     el.style.setProperty(

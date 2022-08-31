@@ -21,7 +21,9 @@ export function TlDesign() {
         page={page}
         pageState={pageState}
         // pointer
+        onPointerDown={app.onPointerDown}
         onPointerUp={app.onPointerUp}
+        onPointerMove={app.onPointerMove}
         // shape
         onPointShape={app.onPointShape}
         onHoverShape={app.onHoverShape}
