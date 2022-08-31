@@ -1,5 +1,5 @@
-import { DIR_BOTTOM, DIR_LEFT, DIR_RIGHT, DIR_TOP } from '@/constance'
-import { TLBounds } from '@/types'
+import { useBoundsHandleEvents } from '@/hooks/useBoundsHandleEvents'
+import { TLBounds, TLScaleHandle } from '@/types'
 
 interface ScaleHandleProps {
   size: number
@@ -15,25 +15,33 @@ export const ScaleHandle = ({ size, bounds, value }: ScaleHandleProps) => {
   let height = size
   let x = 0
   let y = 0
-  if (value & DIR_LEFT) {
+  if (value & TLScaleHandle.Left) {
     x = -size / 2
-  } else if (value & DIR_RIGHT) {
+  } else if (value & TLScaleHandle.Right) {
     x = bounds.width - size / 2
   } else {
     x = bounds.width / 2 - size
     width = size * 2
   }
-  if (value & DIR_TOP) {
+  if (value & TLScaleHandle.Top) {
     y = -size / 2
-  } else if (value & DIR_BOTTOM) {
+  } else if (value & TLScaleHandle.Bottom) {
     y = bounds.height - size / 2
   } else {
     y = bounds.height / 2 - size
     height = size * 2
   }
+  const events = useBoundsHandleEvents(value)
   return (
     <g>
-      <rect x={x} y={y} width={width} height={height}></rect>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        pointerEvents="all"
+        {...events}
+      ></rect>
     </g>
   )
 }

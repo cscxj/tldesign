@@ -74,6 +74,13 @@ const TLCSS = css`
     contain: layout style size;
   }
 
+  .tl-rotate-handle {
+    stroke: #ff0000;
+    fill: #ff000022;
+    stroke-width: calc(1.5px * var(--tl-scale));
+    cursor: grab;
+  }
+
   .tl-brush {
     fill: #ff000022;
     stroke: #ff0000;

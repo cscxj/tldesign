@@ -1,9 +1,11 @@
 import {
   Point,
   TLBoundsEventHandler,
+  TLBoundsHandleEventHandler,
   TLCanvasEventHandler,
   TLPageState,
-  TLPointerEventHandler
+  TLPointerEventHandler,
+  TLShapeEventsHandler
 } from '@tldesign/core'
 import { DEAD_ZONE } from './constance'
 import { getSession, TDSession } from './sessions'
@@ -270,15 +272,15 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   // shape events
-  onPointShape: TLPointerEventHandler = (info) => {
+  onPointShape: TLShapeEventsHandler = (info) => {
     this.select(info.target)
   }
 
-  onHoverShape: TLPointerEventHandler = (info) => {
+  onHoverShape: TLShapeEventsHandler = (info) => {
     this.setHoveredId(info.target)
   }
 
-  onUnHoverShape: TLPointerEventHandler = (info) => {
+  onUnHoverShape: TLShapeEventsHandler = (info) => {
     requestAnimationFrame(() => {
       if (this.pageState.hoveredId === info.target) {
         this.setHoveredId(undefined)
@@ -294,6 +296,12 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   onReleaseBounds: TLBoundsEventHandler = () => {
     this.setStatus(TDStatus.Idle)
+  }
+
+  // bounds handle
+
+  onPointBoundsHandle: TLBoundsHandleEventHandler = () => {
+    console.log('aaa')
   }
 
   // canvas events

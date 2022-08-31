@@ -1,5 +1,18 @@
 export type Point = [x: number, y: number]
 
+export enum TLScaleHandle {
+  Left = 1, // 0b0001
+  Right = 2, // 0b0010
+  Top = 4, // 0b0100
+  Bottom = 8, // 0b1000
+  TopLeft = 5, // 0b0101
+  TopRight = 6, // 0b0110
+  BottomLeft = 9, // 0b1001
+  BottomRight = 10 // 0b1010
+}
+
+export type TLBoundsHandle = TLScaleHandle | 'rotate'
+
 export interface TLBounds {
   x: number
   y: number
@@ -48,7 +61,7 @@ export interface TLComponentProps<S extends TLShape> {
   events: TLShapeEvents
 }
 
-export interface TLPointerInfo<T extends string> {
+export interface TLPointerInfo<T extends TLEventTarget> {
   target: T
   pointerId: number
   origin: Point
@@ -72,22 +85,28 @@ export interface TLKeyboardInfo {
   altKey: boolean
 }
 
-export type TLPointerEventHandler = (info: TLPointerInfo<string>) => void
+export type TLEventTarget = string | number
+
+export type TLPointerEventHandler = (info: TLPointerInfo<TLEventTarget>) => void
+export type TLShapeEventsHandler = (info: TLPointerInfo<string>) => void
 export type TLCanvasEventHandler = (info: TLPointerInfo<'canvas'>) => void
 export type TLBoundsEventHandler = (info: TLPointerInfo<'bounds'>) => void
+export type TLBoundsHandleEventHandler = (
+  info: TLPointerInfo<TLBoundsHandle>
+) => void
 
 export type TLKeyboardEventHandler = (info: TLKeyboardInfo) => void
 export type TLDropEventHandler = (e: React.DragEvent<Element>) => void
 
 export interface TLEvents {
   // Shape
-  onPointShape: TLPointerEventHandler
-  onHoverShape: TLPointerEventHandler
-  onUnHoverShape: TLPointerEventHandler
-  onDragShape: TLPointerEventHandler
-  onReleaseShape: TLPointerEventHandler
-  onDoubleClickShape: TLPointerEventHandler
-  onRightPointShape: TLPointerEventHandler
+  onPointShape: TLShapeEventsHandler
+  onHoverShape: TLShapeEventsHandler
+  onUnHoverShape: TLShapeEventsHandler
+  onDragShape: TLShapeEventsHandler
+  onReleaseShape: TLShapeEventsHandler
+  onDoubleClickShape: TLShapeEventsHandler
+  onRightPointShape: TLShapeEventsHandler
 
   // bounds
   onPointBounds: TLBoundsEventHandler
@@ -97,6 +116,15 @@ export interface TLEvents {
   onHoverBounds: TLBoundsEventHandler
   onUnHoverBounds: TLBoundsEventHandler
   onReleaseBounds: TLBoundsEventHandler
+
+  // Bounds handles (corners, edges)
+  onPointBoundsHandle: TLBoundsHandleEventHandler
+  onDoubleClickBoundsHandle: TLBoundsHandleEventHandler
+  onRightPointBoundsHandle: TLBoundsHandleEventHandler
+  onDragBoundsHandle: TLBoundsHandleEventHandler
+  onHoverBoundsHandle: TLBoundsHandleEventHandler
+  onUnHoverBoundsHandle: TLBoundsHandleEventHandler
+  onReleaseBoundsHandle: TLBoundsHandleEventHandler
 
   // canvas
   onPointCanvas: TLCanvasEventHandler

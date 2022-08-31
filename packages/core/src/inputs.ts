@@ -1,13 +1,13 @@
-import type { Point, TLPointerInfo } from '@/types'
+import type { Point, TLEventTarget, TLPointerInfo } from '@/types'
 
 const DOUBLE_CLICK_DURATION = 250
 
 export class Inputs {
-  pointer?: TLPointerInfo<string>
+  pointer?: TLPointerInfo<TLEventTarget>
   activePointer?: number
   pointerUpTime = 0
 
-  pointerEnter<T extends string>(e: React.PointerEvent, target: T) {
+  pointerEnter<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]
@@ -30,7 +30,7 @@ export class Inputs {
     return info
   }
 
-  pointerDown<T extends string>(e: React.PointerEvent, target: T) {
+  pointerDown<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]
@@ -67,7 +67,7 @@ export class Inputs {
     return isDoubleClick
   }
 
-  pointerUp<T extends string>(e: React.PointerEvent, target: T) {
+  pointerUp<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const prev = this.pointer
@@ -97,7 +97,7 @@ export class Inputs {
     return info
   }
 
-  pointerMove<T extends string>(e: React.PointerEvent, target: T) {
+  pointerMove<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]

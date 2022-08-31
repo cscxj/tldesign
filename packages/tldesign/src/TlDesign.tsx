@@ -31,6 +31,8 @@ export function TlDesign() {
         // bounds
         onPointBounds={app.onPointBounds}
         onReleaseBounds={app.onReleaseBounds}
+        // bounds handle
+        onPointBoundsHandle={app.onPointBoundsHandle}
         // canvas
         onPointCanvas={app.onPointCanvas}
       ></Renderer>
