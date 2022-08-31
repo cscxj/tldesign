@@ -2,7 +2,7 @@
 import { deepCopy } from './copy'
 import create, { UseBoundStore } from 'zustand'
 import createVanilla, { StoreApi } from 'zustand/vanilla'
-import { Utils } from '@/utils'
+import { Utils } from '@tldesign/core'
 import { Patch } from '@/types'
 
 export class StateManager<T extends Record<string, any>> {

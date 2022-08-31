@@ -1,7 +1,6 @@
 import { TDShape, TDShapeType } from '@/types'
-import { Utils } from '@/utils'
 import Intersect from '@tldesign/intersect'
-import { Point, TLBounds, TLShapeUtil } from '@tldesign/core'
+import { Point, TLBounds, TLShapeUtil, Utils } from '@tldesign/core'
 
 export abstract class TDShapeUtil<S extends TDShape> extends TLShapeUtil<S> {
   abstract type: TDShapeType

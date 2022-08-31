@@ -1,7 +1,6 @@
 import { TlDesignApp } from '@/TlDesignApp'
 import { SessionType, TDStatus, TlDesignPatch } from '@/types'
-import { Utils } from '@/utils'
-import { TLBounds } from '@tldesign/core'
+import { TLBounds, Utils } from '@tldesign/core'
 import { BaseSession } from '../BaseSession'
 
 export class BrushSession extends BaseSession {

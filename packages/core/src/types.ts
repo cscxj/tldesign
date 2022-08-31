@@ -158,3 +158,5 @@ export type TLForwardedRef<E> =
   | ((instance: E | null) => void)
   | React.MutableRefObject<E | null>
   | null
+
+export type Patch<T> = Partial<{ [P in keyof T]: Patch<T[P]> }>
