@@ -85,11 +85,16 @@ importers:
     specifiers:
       '@stitches/react': ^1.2.8
       '@tldesign/core': workspace:*
+      '@tldesign/vec': workspace:*
       zustand: ^4.1.1
     dependencies:
       '@stitches/react': 1.2.8
       '@tldesign/core': link:../core
+      '@tldesign/vec': link:../vec
       zustand: 4.1.1
+
+  packages/vec:
+    specifiers: {}
 
 packages:
 

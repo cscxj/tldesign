@@ -1,6 +1,6 @@
 import { TlDesignApp } from '@/TlDesignApp'
 import { Patch, SessionType, TDShape, TlDesignPatch } from '@/types'
-import { Vec } from '@/utils'
+import Vec from '@tldesign/vec'
 import { Point } from '@tldesign/core'
 import { BaseSession } from '../BaseSession'
 

@@ -13,6 +13,7 @@
   "dependencies": {
     "@stitches/react": "^1.2.8",
     "@tldesign/core": "workspace:*",
+    "@tldesign/vec": "workspace:*",
     "zustand": "^4.1.1"
   }
 }

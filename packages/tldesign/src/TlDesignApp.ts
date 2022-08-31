@@ -20,7 +20,8 @@ import {
   TDStatus,
   SessionType
 } from './types'
-import { Snapshot, Vec } from './utils'
+import { Snapshot } from './utils'
+import Vec from '@tldesign/vec'
 
 export class TlDesignApp extends StateManager<TDSnapshot> {
   session?: TDSession

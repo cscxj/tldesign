@@ -1,6 +1,6 @@
 import { Patch } from '@/types'
 import { Point, TLBounds } from '@tldesign/core'
-import { Vec } from '.'
+import Vec from '@tldesign/vec'
 
 export function deepMerge<T>(target: T, patch: Patch<T>): T {
   const result: T = { ...target }

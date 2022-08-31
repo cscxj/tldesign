@@ -1,4 +1,4 @@
-import { Point } from '@tldesign/core'
+import { Point } from './types'
 
 /**
  * 向量除以标量

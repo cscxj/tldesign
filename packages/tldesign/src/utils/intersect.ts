@@ -1,5 +1,5 @@
 import { Point, TLBounds } from '@tldesign/core'
-import { Vec } from '.'
+import Vec from '@tldesign/vec'
 
 type LineSegment = [Point, Point]
 type RectangleSides = [
