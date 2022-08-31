@@ -210,6 +210,22 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             },
             parentId: 'page1',
             childIndex: 1
+          },
+          image2: {
+            id: 'image2',
+            type: TDShapeType.Image,
+            assetId:
+              'https://gd-ai-application.dancf.com/temp/e62fb408085b8a93b9e1edeca31e90af.png',
+            bounds: {
+              width: 160,
+              height: 160,
+              x: 200,
+              y: 200,
+              rotation: 0,
+              skew: 0
+            },
+            parentId: 'page1',
+            childIndex: 1
           }
         }
       }
