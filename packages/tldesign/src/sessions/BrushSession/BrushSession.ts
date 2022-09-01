@@ -1,17 +1,16 @@
 import { TlDesignApp } from '@/TlDesignApp'
-import { SessionType, TDStatus, TlDesignPatch } from '@/types'
+import { SessionType, TlDesignPatch } from '@/types'
 import { TLBounds, Utils } from '@tldesign/core'
 import { BaseSession } from '../BaseSession'
 
 export class BrushSession extends BaseSession {
   type = SessionType.Brush
 
-  status = TDStatus.Brushing
-  initialSelectedIds: Set<string>
+  readonly initialSelectedIds: Set<string>
   /**
    * 允许框选的图形
    */
-  shapesToTest: {
+  readonly shapesToTest: {
     id: string
     bounds: TLBounds
     selectId: string

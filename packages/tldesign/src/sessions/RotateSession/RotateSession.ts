@@ -8,21 +8,17 @@ import Vec from '@tldesign/vec'
 export class RotateSession extends BaseSession {
   type = SessionType.Rotate
   /**
-   * 鼠标偏移量
-   */
-  delta: Point = [0, 0]
-  /**
    * 公共边界中心点
    */
-  commonBoundsCenter: Point
+  readonly commonBoundsCenter: Point
   /**
    * 初始角度
    */
-  initialAngle: number
+  readonly initialAngle: number
   /**
    * 要旋转的图形
    */
-  initialShapes: {
+  readonly initialShapes: {
     shape: TDShape
     center: Point
   }[]
