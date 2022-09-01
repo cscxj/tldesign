@@ -298,7 +298,11 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   // shape events
   onPointShape: TLShapeEventsHandler = (info) => {
-    this.select(info.target)
+    const selectedIds = new Set(this.selectedIds)
+
+    if (!selectedIds.has(info.target)) {
+      this.select(info.target)
+    }
   }
 
   onHoverShape: TLShapeEventsHandler = (info) => {
