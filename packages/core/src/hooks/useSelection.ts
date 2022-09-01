@@ -1,4 +1,5 @@
 import { TLBounds, TLPage, TLPageState } from '@/types'
+import { Utils } from '@/utils'
 
 export function useSelection(page: TLPage, pageState: TLPageState) {
   const { selectedIds } = pageState
@@ -15,6 +16,15 @@ export function useSelection(page: TLPage, pageState: TLPageState) {
     }
 
     bounds = shape.bounds
+  } else if (selectedIds.length > 1) {
+    const selectedShapes = selectedIds.map((id) => page.shapes[id])
+
+    bounds = selectedShapes.reduce((acc, shape, i) => {
+      if (i === 0) {
+        return shape.bounds
+      }
+      return Utils.getExpandedBounds(acc, shape.bounds)
+    }, {} as TLBounds)
   }
   return { bounds }
 }

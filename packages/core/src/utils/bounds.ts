@@ -69,3 +69,20 @@ export function pointInBounds(A: Point, b: TLBounds): boolean {
     A[0] > b.x && A[0] < b.x + b.width && A[1] > b.y && A[1] < b.y + b.height
   )
 }
+
+/**
+ * Get a bounding box that includes two bounding boxes.
+ * @param a Bounding box
+ * @param b Bounding box
+ * @returns
+ */
+export function getExpandedBounds(a: TLBounds, b: TLBounds): TLBounds {
+  const x = Math.min(a.x, b.x)
+  const y = Math.min(a.y, b.y)
+  const maxX = Math.max(a.x + a.width, b.x + b.width)
+  const maxY = Math.max(a.y + a.height, b.y + b.height)
+  const width = Math.abs(maxX - x)
+  const height = Math.abs(maxY - y)
+
+  return { x, y, width, height }
+}
