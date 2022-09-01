@@ -283,11 +283,9 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
               this.setStatus(TDStatus.Translating)
               break
             }
-            case TDStatus.PointingBoundsHandle: {
-              if (info.target === 'rotate') {
-                this.startSession(SessionType.Rotate)
-                this.setStatus(TDStatus.Rotating)
-              }
+            case TDStatus.PointingRotateHandle: {
+              this.startSession(SessionType.Rotate)
+              this.setStatus(TDStatus.Rotating)
               break
             }
           }
@@ -329,8 +327,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   // bounds handle
 
-  onPointBoundsHandle: TLBoundsHandleEventHandler = () => {
-    this.setStatus(TDStatus.PointingBoundsHandle)
+  onPointBoundsHandle: TLBoundsHandleEventHandler = (info) => {
+    if (info.target === 'rotate') {
+      this.setStatus(TDStatus.PointingRotateHandle)
+    }
   }
 
   // canvas events

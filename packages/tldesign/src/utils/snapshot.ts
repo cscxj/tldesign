@@ -1,5 +1,5 @@
 import { TDSnapshot, TDPage, TDShape } from '@/types'
-import { TLPageState } from '@tldesign/core'
+import { TLPageState, Utils } from '@tldesign/core'
 
 export function getSelectedShapes(data: TDSnapshot, pageId: string) {
   const page = getPage(data, pageId)
@@ -25,4 +25,63 @@ export function getShape<T extends TDShape = TDShape>(
   pageId: string
 ): T {
   return getPage(data, pageId).shapes[shapeId] as T
+}
+
+/**
+ * 获取当前分支的所有id
+ * @param data
+ * @param id
+ * @param pageId
+ * @returns ids
+ */
+function getDocumentBranch(
+  data: TDSnapshot,
+  id: string,
+  pageId: string
+): string[] {
+  const shape = getShape(data, id, pageId)
+
+  if (shape.children === undefined) return [id]
+
+  return [
+    id,
+    ...shape.children.flatMap((childId) =>
+      getDocumentBranch(data, childId, pageId)
+    )
+  ]
+}
+
+/**
+ * 获取所有已选分支的拷贝
+ * @param data
+ * @param pageId
+ * @param fn 处理shape的函数
+ */
+export function getSelectedBranchSnapshot<K>(
+  data: TDSnapshot,
+  pageId: string,
+  fn: (shape: TDShape) => K
+): ({ id: string } & K)[]
+export function getSelectedBranchSnapshot(
+  data: TDSnapshot,
+  pageId: string
+): TDShape[]
+export function getSelectedBranchSnapshot<K>(
+  data: TDSnapshot,
+  pageId: string,
+  fn?: (shape: TDShape) => K
+): (TDShape | K)[] {
+  const page = getPage(data, pageId)
+
+  const copies = getSelectedIds(data, pageId)
+    .flatMap((id) =>
+      getDocumentBranch(data, id, pageId).map((id) => page.shapes[id])
+    )
+    .map(Utils.deepClone)
+
+  if (fn !== undefined) {
+    return copies.map((shape) => ({ id: shape.id, ...fn(shape) }))
+  }
+
+  return copies
 }

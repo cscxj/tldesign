@@ -17,7 +17,8 @@ export enum TDStatus {
   Idle = 'idle',
   PointingBounds = 'pointing_bounds',
   PointingCanvas = 'pointing_canvas',
-  PointingBoundsHandle = 'pointing_bounds_handle',
+  PointingRotateHandle = 'pointing_rotate_handle',
+  PointingScaleHandle = 'pointing_bounds_handle',
   Brushing = 'brushing',
   Translating = 'translating',
   Rotating = 'rotating'

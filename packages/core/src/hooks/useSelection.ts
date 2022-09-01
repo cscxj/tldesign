@@ -19,11 +19,12 @@ export function useSelection(page: TLPage, pageState: TLPageState) {
   } else if (selectedIds.length > 1) {
     const selectedShapes = selectedIds.map((id) => page.shapes[id])
 
-    bounds = selectedShapes.reduce((acc, shape, i) => {
+    bounds = selectedShapes.reduce((acc, { bounds }, i) => {
+      bounds = Utils.getBoundsFromPoints(Utils.getRotatedCorners(bounds))
       if (i === 0) {
-        return shape.bounds
+        return bounds
       }
-      return Utils.getExpandedBounds(acc, shape.bounds)
+      return Utils.getExpandedBounds(acc, bounds)
     }, {} as TLBounds)
   }
   return { bounds }

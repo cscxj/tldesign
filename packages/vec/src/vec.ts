@@ -21,7 +21,7 @@ export function sub(A: Point, B: Point): Point {
 }
 
 /**
- * 向量A绕向量C旋转r (radians)
+ * 点 A 绕点 C 旋转r (radians)
  * @param A vector
  * @param C center
  * @param r rotation in radians
@@ -76,4 +76,13 @@ export function dist(A: Point, B: Point): number {
  */
 export function toFixed(a: Point): Point {
   return a.map((v) => Math.round(v * 100) / 100) as Point
+}
+
+/**
+ * 线段AB与x轴的夹角
+ * @param A
+ * @param B
+ */
+export function angle(A: Point, B: Point): number {
+  return Math.atan2(B[1] - A[1], B[0] - A[0])
 }

@@ -6,7 +6,10 @@ import Vec from '@tldesign/vec'
  * @param points
  * @param rotation (optional) The bounding box's rotation.
  */
-export function getBoundsFromPoints(points: Point[], rotation = 0): TLBounds {
+export function getBoundsFromPoints(
+  points: Point[],
+  rotation?: number
+): TLBounds {
   let x0 = Infinity
   let y0 = Infinity
   let x1 = -Infinity
@@ -24,20 +27,12 @@ export function getBoundsFromPoints(points: Point[], rotation = 0): TLBounds {
     }
   }
 
-  if (rotation !== 0) {
-    return getBoundsFromPoints(
-      points.map((pt: Point) => {
-        const center: Point = [(x1 - x0) / 2, (y1 - y0) / 2]
-        return Vec.rotWith(pt, center, rotation)
-      })
-    )
-  }
-
   return {
     x: x0,
     y: y0,
     width: Math.max(1, x1 - x0),
-    height: Math.max(1, y1 - y0)
+    height: Math.max(1, y1 - y0),
+    rotation
   }
 }
 
@@ -85,4 +80,28 @@ export function getExpandedBounds(a: TLBounds, b: TLBounds): TLBounds {
   const height = Math.abs(maxY - y)
 
   return { x, y, width, height }
+}
+
+/**
+ * 获取边界中心点
+ * @param bounds
+ */
+export function getBoundsCenter(bounds: TLBounds): Point {
+  return [bounds.x + bounds.width / 2, bounds.y + bounds.height / 2]
+}
+
+/**
+ * 获取一组边界的公共边界
+ * @returns
+ */
+export function getCommonBounds(bounds: TLBounds[]): TLBounds {
+  if (bounds.length < 2) return bounds[0]
+
+  let result = bounds[0]
+
+  for (let i = 1; i < bounds.length; i++) {
+    result = getExpandedBounds(result, bounds[i])
+  }
+
+  return result
 }
