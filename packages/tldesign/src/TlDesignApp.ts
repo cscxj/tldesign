@@ -5,10 +5,11 @@ import {
   TLCanvasEventHandler,
   TLPageState,
   TLPointerEventHandler,
+  TLScaleHandle,
   TLShapeEventsHandler
 } from '@tldesign/core'
 import { DEAD_ZONE } from './constance'
-import { getSession, TDSession } from './sessions'
+import { getSession, SessionArgsOfType, TDSession } from './sessions'
 import { getShapeUtil } from './shapes'
 import { StateManager } from './StateManager/StateManager'
 import {
@@ -37,6 +38,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
    * 是否按下鼠标
    */
   isPointing = false
+  /**
+   * 当前按下的缩放控制点
+   */
+  pointedScaleHandle?: TLScaleHandle
 
   shiftKey = false
   altKey = false
@@ -288,6 +293,11 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
               this.setStatus(TDStatus.Rotating)
               break
             }
+            case TDStatus.PointingScaleHandle: {
+              this.startSession(SessionType.Scale, this.pointedScaleHandle!)
+              this.setStatus(TDStatus.Scaling)
+              break
+            }
           }
         }
       }
@@ -330,6 +340,9 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   onPointBoundsHandle: TLBoundsHandleEventHandler = (info) => {
     if (info.target === 'rotate') {
       this.setStatus(TDStatus.PointingRotateHandle)
+    } else {
+      this.setStatus(TDStatus.PointingScaleHandle)
+      this.pointedScaleHandle = info.target
     }
   }
 
@@ -342,9 +355,13 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   /** ---------------------- session start ------------------------------ */
-  startSession<T extends SessionType>(type: T): this {
+  startSession<T extends SessionType>(
+    type: T,
+    ...args: SessionArgsOfType<T>
+  ): this {
     const Session = getSession(type)
-    this.session = new Session(this)
+    // @ts-ignore
+    this.session = new Session(this, ...args)
 
     const result = this.session.start()
     if (result) {

@@ -60,6 +60,10 @@ export function mul(A: Point, n: number): Point {
   return [A[0] * n, A[1] * n]
 }
 
+export function mulV(A: Point, B: Point): Point {
+  return [A[0] * B[0], A[1] * B[1]]
+}
+
 /**
  * 点A到点B的长度
  * @param A

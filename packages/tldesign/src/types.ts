@@ -10,7 +10,8 @@ export enum TDShapeType {
 export enum SessionType {
   Brush = 'brush',
   Translate = 'translate',
-  Rotate = 'rotate'
+  Rotate = 'rotate',
+  Scale = 'scale'
 }
 
 export enum TDStatus {
@@ -18,10 +19,11 @@ export enum TDStatus {
   PointingBounds = 'pointing_bounds',
   PointingCanvas = 'pointing_canvas',
   PointingRotateHandle = 'pointing_rotate_handle',
-  PointingScaleHandle = 'pointing_bounds_handle',
+  PointingScaleHandle = 'pointing_scale_handle',
   Brushing = 'brushing',
   Translating = 'translating',
-  Rotating = 'rotating'
+  Rotating = 'rotating',
+  Scaling = 'scaling'
 }
 
 export interface TDBaseShape extends TLShape {
@@ -64,8 +66,6 @@ export interface TDSnapshot {
   document: TDDocument
 }
 
-export type Patch<T> = Partial<{ [P in keyof T]: Patch<T[P]> }>
-
 export type TlDesignPatch = Patch<TDSnapshot>
 
 export interface Command<T extends { [key: string]: any }> {
@@ -75,3 +75,9 @@ export interface Command<T extends { [key: string]: any }> {
 }
 
 export type TlDesignCommand = Command<TDSnapshot>
+
+export type Patch<T> = Partial<{ [P in keyof T]: Patch<T[P]> }>
+
+export type ExceptFirst<T extends unknown[]> = T extends [any, ...infer U]
+  ? U
+  : never
