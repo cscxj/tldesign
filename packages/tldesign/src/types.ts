@@ -4,7 +4,8 @@ import { TLPage, TLPageState, TLShape } from '@tldesign/core'
 
 export enum TDShapeType {
   Image = 'image',
-  Text = 'text'
+  Text = 'text',
+  Group = 'group'
 }
 
 export enum SessionType {
@@ -40,7 +41,11 @@ export interface TextShape extends TDBaseShape {
   text: string
 }
 
-export type TDShape = ImageShape | TextShape
+export interface GroupShape extends TDBaseShape {
+  type: TDShapeType.Group
+}
+
+export type TDShape = ImageShape | TextShape | GroupShape
 
 // page
 

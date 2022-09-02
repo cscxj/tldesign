@@ -1,7 +1,7 @@
 import { TlDesignApp } from '@/TlDesignApp'
 import { SessionType, TDShape, TlDesignPatch } from '@/types'
 import { Snapshot } from '@/utils'
-import { Point, TLBounds, Utils } from '@tldesign/core'
+import { Point, Utils } from '@tldesign/core'
 import { BaseSession } from '../BaseSession'
 import Vec from '@tldesign/vec'
 
@@ -18,10 +18,7 @@ export class RotateSession extends BaseSession {
   /**
    * 要旋转的图形
    */
-  readonly initialShapes: {
-    shape: TDShape
-    center: Point
-  }[]
+  readonly initialShapes: TDShape[]
 
   constructor(app: TlDesignApp) {
     super(app)
@@ -42,12 +39,8 @@ export class RotateSession extends BaseSession {
       )
     )
 
-    this.initialShapes = initialShapes.map((shape) => {
-      return {
-        shape,
-        center: Utils.getBoundsCenter(shape.bounds)
-      }
-    })
+    this.initialShapes = initialShapes
+
     this.initialAngle = Vec.angle(this.commonBoundsCenter, originPoint)
   }
 
@@ -65,10 +58,9 @@ export class RotateSession extends BaseSession {
 
     const shapes: Record<string, Partial<TDShape>> = {}
     // 更新图形
-    initialShapes.forEach(({ center, shape }) => {
-      const changed = getRotatedBoundsMutation(
+    initialShapes.forEach((shape) => {
+      const changed = Utils.getRotatedBounds(
         shape.bounds,
-        center,
         commonBoundsCenter,
         angleDelta
       )
@@ -90,35 +82,4 @@ export class RotateSession extends BaseSession {
   }
   cancel = (): TlDesignPatch | undefined => void null
   complete = (): TlDesignPatch | undefined => void null
-}
-
-/**
- * 旋转图形
- * @param bounds
- * @param center 图形中点
- * @param origin 旋转原点
- * @param delta 旋转角度
- * @returns 旋转之后的图形
- */
-function getRotatedBoundsMutation(
-  bounds: TLBounds,
-  center: Point,
-  origin: Point,
-  delta: number
-): TLBounds {
-  // 相对中心的位置
-  const relativeCenter = Vec.sub(center, [bounds.x, bounds.y])
-  // 中心旋转之后的位置
-  const rotatedCenter = Vec.rotWith(center, origin, delta)
-  // 旋转之后的位置
-  const [x, y] = Vec.toFixed(Vec.sub(rotatedCenter, relativeCenter))
-
-  const nextRotation = Utils.clampRadians((bounds.rotation || 0) + delta)
-
-  return {
-    ...bounds,
-    x,
-    y,
-    rotation: nextRotation
-  }
 }

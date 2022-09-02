@@ -3,25 +3,20 @@ import { Patch, SessionType, TDShape, TlDesignPatch } from '@/types'
 import Vec from '@tldesign/vec'
 import { Point } from '@tldesign/core'
 import { BaseSession } from '../BaseSession'
+import { Snapshot } from '@/utils'
 
 export class TranslateSession extends BaseSession {
   type = SessionType.Translate
 
-  initialSelectedIds: string[]
-
   initialShapes: TDShape[]
-  initialIds: Set<string>
 
   constructor(app: TlDesignApp) {
     super(app)
-    const { selectedIds } = this.app
-    this.initialSelectedIds = [...selectedIds]
-    // 过滤不能移动的
-    const shapes = selectedIds.map((id) => this.app.getShape(id))
-    const shapeIds = new Set(shapes.map((shape) => shape.id))
 
-    this.initialShapes = shapes
-    this.initialIds = shapeIds
+    this.initialShapes = Snapshot.getSelectedBranchSnapshot(
+      this.app.state,
+      this.app.currentPageId
+    )
   }
 
   start = (): TlDesignPatch | undefined => void null

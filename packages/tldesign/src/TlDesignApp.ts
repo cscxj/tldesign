@@ -201,6 +201,19 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
         id: 'page1',
         name: 'Page 1',
         shapes: {
+          group1: {
+            id: 'group1',
+            type: TDShapeType.Group,
+            bounds: {
+              width: 200,
+              height: 200,
+              x: 100,
+              y: 100
+            },
+            parentId: 'page1',
+            childIndex: 1,
+            children: ['image1', 'image2']
+          },
           image1: {
             id: 'image1',
             type: TDShapeType.Image,
@@ -208,13 +221,13 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
               'https://gd-ai-application.dancf.com/temp/3edaf84e08e52a07c852f70725b17ba6.png',
             bounds: {
               width: 100,
-              height: 150,
+              height: 100,
               x: 100,
               y: 100,
               rotation: 0,
               skew: 0
             },
-            parentId: 'page1',
+            parentId: 'group1',
             childIndex: 1
           },
           image2: {
@@ -223,14 +236,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             assetId:
               'https://gd-ai-application.dancf.com/temp/e62fb408085b8a93b9e1edeca31e90af.png',
             bounds: {
-              width: 160,
-              height: 160,
+              width: 100,
+              height: 100,
               x: 200,
               y: 200,
               rotation: 0,
               skew: 0
             },
-            parentId: 'page1',
+            parentId: 'group1',
             childIndex: 1
           }
         }

@@ -1,5 +1,6 @@
 import { Point, TLBounds } from '@/types'
 import Vec from '@tldesign/vec'
+import { clampRadians } from './utils'
 
 /**
  * 根据多个点确定一个bounds区域
@@ -104,4 +105,36 @@ export function getCommonBounds(bounds: TLBounds[]): TLBounds {
   }
 
   return result
+}
+
+/**
+ * 旋转图形
+ * @param bounds
+ * @param origin 旋转原点
+ * @param delta 旋转角度
+ * @returns 旋转之后的边界
+ */
+export function getRotatedBounds(
+  bounds: TLBounds,
+  origin: Point,
+  theta = 0
+): TLBounds {
+  if (theta === 0) return bounds
+
+  const center = getBoundsCenter(bounds)
+  // 相对中心的位置
+  const relativeCenter = Vec.sub(center, [bounds.x, bounds.y])
+  // 中心旋转之后的位置
+  const rotatedCenter = Vec.rotWith(center, origin, theta)
+  // 旋转之后的位置
+  const [x, y] = Vec.toFixed(Vec.sub(rotatedCenter, relativeCenter))
+
+  const nextRotation = clampRadians((bounds.rotation || 0) + theta)
+
+  return {
+    ...bounds,
+    x,
+    y,
+    rotation: nextRotation
+  }
 }
