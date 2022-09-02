@@ -25,8 +25,8 @@ export const Bounds = ({ bounds }: BoundsProps) => {
               bounds={bounds}
             ></ScaleHandle>
           ))}
-        <RotateHandle bounds={bounds} size={10}></RotateHandle>
       </SVGContainer>
+      <RotateHandle bounds={bounds} size={10}></RotateHandle>
     </Container>
   )
 }

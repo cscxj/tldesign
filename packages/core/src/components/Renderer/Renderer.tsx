@@ -1,5 +1,5 @@
 import { IRendererContext, RendererContext } from '@/hooks/useRendererContext'
-import { useStyle } from '@/hooks/useStyle'
+import { useTLTheme } from '@/hooks/useStyle'
 import { Inputs } from '@/inputs'
 import { TLShapeUtilsMap } from '@/TLShapeUtil'
 import { TLEvents, TLPage, TLPageState, TLShape } from '@/types'
@@ -20,7 +20,7 @@ export const Renderer = <S extends TLShape>({
   shapeUtils,
   ...rest
 }: RendererProps<S>) => {
-  useStyle()
+  useTLTheme()
 
   const [context] = useState<IRendererContext>({
     id,

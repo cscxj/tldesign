@@ -12,8 +12,9 @@ export const ShapeIndicator = ({ shape }: ShapeIndicatorProps) => {
   return (
     <Container bounds={shape.bounds}>
       <svg width="100%" height="100%">
-        <g className="tl-centered-g" stroke="#ff0000" fill="transparent">
+        <g className="tl-centered-g" fill="transparent">
           <rect
+            className="tl-indicator"
             x={0}
             y={0}
             width={Math.max(1, width)}

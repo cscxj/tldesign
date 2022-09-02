@@ -1,6 +1,15 @@
 import type { Point } from '@tldesign/vec'
 export { Point }
 
+export interface TLTheme {
+  brushFill?: string
+  brushStroke?: string
+  selectFill?: string
+  selectStroke?: string
+  background?: string
+  foreground?: string
+}
+
 export enum TLScaleHandle {
   Left = 1, // 0b0001
   Right = 2, // 0b0010
