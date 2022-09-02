@@ -12,7 +12,8 @@ export class ScaleSession extends BaseSession {
    */
   readonly initialShapes: {
     shape: TDShape
-    // 相对于缩放原点的位置
+    // 相对于缩放原点的位置,
+    // 以commonBounds的宽和高分别为x、y轴，scaleOrigin为坐标原点
     relativeOrigin: Point
   }[]
   /**
@@ -41,18 +42,23 @@ export class ScaleSession extends BaseSession {
     )
     this.initialShapeIds = initialShapes.map((shape) => shape.id)
 
-    this.initialCommonBounds = Utils.getCommonBounds(
-      initialShapes.map((shape) =>
-        Utils.getBoundsFromPoints(Utils.getRotatedCorners(shape.bounds))
-      )
-    )
+    const isSingle = initialShapes.length === 1
+
+    this.initialCommonBounds = isSingle
+      ? initialShapes[0].bounds
+      : Utils.getCommonBounds(
+          initialShapes.map((shape) =>
+            Utils.getBoundsFromPoints(Utils.getRotatedCorners(shape.bounds))
+          )
+        )
 
     // 计算缩放原点
-    const { x, y, width, height } = this.initialCommonBounds
+    const { x, y, width, height, rotation } = this.initialCommonBounds
     const rX = width / 2
     const rH = height / 2
     let originX = x + rX
     let originY = y + rH
+    const center: Point = [originX, originY]
     if (handleId & TLScaleHandle.Left) {
       originX += rX
     }
@@ -65,16 +71,16 @@ export class ScaleSession extends BaseSession {
     if (handleId & TLScaleHandle.Bottom) {
       originY -= rH
     }
-    this.scaleOrigin = [originX, originY]
+
+    const origin: Point = [originX, originY]
+
+    this.scaleOrigin = Vec.rotWith(origin, center, rotation)
 
     // 计算所选图形的初始信息
     this.initialShapes = initialShapes.map((shape) => {
       return {
         shape,
-        relativeOrigin: Vec.sub(
-          Utils.getBoundsCenter(shape.bounds),
-          this.scaleOrigin
-        )
+        relativeOrigin: Vec.sub(Utils.getBoundsCenter(shape.bounds), origin)
       }
     })
   }
@@ -104,42 +110,48 @@ export class ScaleSession extends BaseSession {
     /**
      * 1. 计算整体缩放比例
      */
-    let { width, height } = initialCommonBounds
+    const { width, height, rotation } = initialCommonBounds
 
+    // 鼠标偏移量转化为在宽度和高度上的偏移量
+    // 坐标轴旋转theta, 相当于实际的向量旋转-theta
+    const sizeDelta = Vec.rotWith(delta, [0, 0], -(rotation ?? 0))
+
+    let newWidth = width
+    let newHeight = height
     // 宽度改变值
     let dw = 0
     // 高度改变值
     let dh = 0
-    // 左边的控制点：x 轴正方向移动 宽度增加
+
     if (scaleType & TLScaleHandle.Left) {
-      dw = -delta[0]
+      dw = -sizeDelta[0]
     }
-    // 右边的控制点: x 轴反方向移动 宽度增加
+
     if (scaleType & TLScaleHandle.Right) {
-      dw = delta[0]
+      dw = sizeDelta[0]
     }
-    // 顶部的控制点：y 轴反方向移动 高度增加
+
     if (scaleType & TLScaleHandle.Top) {
-      dh = -delta[1]
+      dh = -sizeDelta[1]
     }
-    // 底部的控制点：y 轴正方向移动 高度增加
+
     if (scaleType & TLScaleHandle.Bottom) {
-      dh = delta[1]
+      dh = sizeDelta[1]
     }
-    width += dw
-    height += dh
+    newWidth += dw
+    newHeight += dh
 
     // 宽度缩放比例
-    const scaleXDelta = width / initialCommonBounds.width
+    const scaleW = newWidth / width
     // 高度缩放比例
-    let scaleYDelta = height / initialCommonBounds.height
+    let scaleH = newHeight / height
 
     // 四个角拖拽，保持比例宽高缩放比例一致
     if (
       scaleType & (TLScaleHandle.Left | TLScaleHandle.Right) &&
       scaleType & (TLScaleHandle.Top | TLScaleHandle.Bottom)
     ) {
-      scaleYDelta = scaleXDelta
+      scaleH = scaleW
     }
 
     /**
@@ -149,9 +161,18 @@ export class ScaleSession extends BaseSession {
     initialShapes.forEach(({ shape, relativeOrigin }) => {
       let { x, y } = shape.bounds
       const { width, height } = shape.bounds
-      const [w, h] = Vec.mulV([width, height], [scaleXDelta, scaleYDelta])
-      relativeOrigin = Vec.mulV(relativeOrigin, [scaleXDelta, scaleYDelta])
-      const shapeCenter = Vec.add(scaleOrigin, relativeOrigin)
+
+      // 缩放宽和高
+      const [w, h] = Vec.mulV([width, height], [scaleW, scaleH])
+
+      // 缩放相对距离
+      relativeOrigin = Vec.mulV(relativeOrigin, [scaleW, scaleH])
+
+      // 新的图形中心位置
+      const shapeCenter = Vec.add(
+        scaleOrigin,
+        Vec.rotWith(relativeOrigin, [0, 0], rotation) // 坐标系再转回去
+      )
       ;[x, y] = Vec.sub(shapeCenter, [w / 2, h / 2])
 
       const newBounds: TLBounds = {
