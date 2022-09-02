@@ -85,3 +85,21 @@ export function getSelectedBranchSnapshot<K>(
 
   return copies
 }
+
+/**
+ * 获取当前图形的最顶层图形
+ * @param data
+ * @param id
+ */
+export function getRootShape(
+  data: TDSnapshot,
+  id: string,
+  pageId: string
+): TDShape {
+  const page = getPage(data, pageId)
+  const shape = getShape(data, id, pageId)
+  if (shape.parentId === page.id) {
+    return shape
+  }
+  return getRootShape(data, shape.parentId, pageId)
+}

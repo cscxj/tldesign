@@ -77,6 +77,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     return this.pageState.selectedIds
   }
 
+  get hoveredId(): string | undefined | null {
+    return this.pageState.hoveredId
+  }
+
   get shapes(): TDShape[] {
     return Object.values(this.page.shapes)
   }
@@ -100,6 +104,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     pageId = this.currentPageId
   ) {
     return Snapshot.getShape<T>(this.state, shapeId, pageId)
+  }
+
+  getRootShape(shapeId: string, pageId = this.currentPageId) {
+    return Snapshot.getRootShape(this.state, shapeId, pageId)
   }
 
   getShapeUtil<T extends TDShape>(shape: T) {
@@ -320,9 +328,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   // shape events
   onPointShape: TLShapeEventsHandler = (info) => {
     const selectedIds = new Set(this.selectedIds)
+    const rootId = this.getRootShape(info.target).id
 
-    if (!selectedIds.has(info.target)) {
-      this.select(info.target)
+    if (!selectedIds.has(rootId)) {
+      this.select(rootId)
     }
   }
 
@@ -330,12 +339,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     this.setHoveredId(info.target)
   }
 
-  onUnHoverShape: TLShapeEventsHandler = (info) => {
-    requestAnimationFrame(() => {
-      if (this.pageState.hoveredId === info.target) {
-        this.setHoveredId(undefined)
-      }
-    })
+  onUnHoverShape: TLShapeEventsHandler = () => {
+    this.setHoveredId(undefined)
   }
 
   // bound events
