@@ -39,6 +39,44 @@ export interface ImageShape extends TDBaseShape {
 export interface TextShape extends TDBaseShape {
   type: TDShapeType.Text
   text: string
+  // 颜色
+  color: string
+  // 背景色
+  backgroundColor: string | null
+  // 字体
+  fontFamily: string
+  // 字体样式，斜体等等
+  fontStyle: string
+  // 粗细
+  fontWeight: number
+  // 字体大小
+  fontSize: number
+  // 行高
+  lineHeight: number
+  // 行距
+  letterSpacing: number
+  // 文本方向
+  textDecoration: string
+  // 写入模式
+  writingMode:
+    | 'horizontal-tb'
+    | 'vertical-rl'
+    | 'vertical-lr'
+    | 'sideways-rl'
+    | 'sideways-lr'
+  // 对齐方式
+  textAlign:
+    | 'center'
+    | 'end'
+    | 'justify'
+    | 'left'
+    | 'match-parent'
+    | 'right'
+    | 'start'
+  // 垂直对齐方式
+  verticalAlign: string
+  // 文字阴影
+  textShadow: string | null
 }
 
 export interface GroupShape extends TDBaseShape {

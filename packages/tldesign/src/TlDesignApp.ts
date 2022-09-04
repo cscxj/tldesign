@@ -253,6 +253,77 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             },
             parentId: 'group1',
             childIndex: 1
+          },
+          image3: {
+            id: 'image3',
+            type: TDShapeType.Image,
+            assetId:
+              'https://img.tusij.com/ips_asset/btw/01/00/44/5bc2cd6000692/5bc2cd600761f.png!w700?auth_key=1687392000-0-0-5014bfff814ed086d1e84ae6bcbd4638',
+            bounds: {
+              width: 100,
+              height: 100,
+              x: 400,
+              y: 100,
+              rotation: 0,
+              skew: 0
+            },
+            parentId: 'page1',
+            childIndex: 1
+          },
+          image4: {
+            id: 'image4',
+            type: TDShapeType.Image,
+            assetId:
+              'https://img.tusij.com/ips_asset/ibt/18/43/03/5d4c1f3806c40.png!w700?auth_key=1687392000-0-0-e0a9e22d7d79a054c3c89af8b5a6d6ad',
+            bounds: {
+              width: 100,
+              height: 100,
+              x: 600,
+              y: 100,
+              rotation: 0,
+              skew: 0
+            },
+            parentId: 'page1',
+            childIndex: 1
+          },
+          text1: {
+            id: 'text1',
+            type: TDShapeType.Text,
+            text: '中秋快乐',
+            bounds: {
+              width: 200,
+              height: 40,
+              x: 400,
+              y: 300
+            },
+            parentId: 'page1',
+            childIndex: 1,
+            // 颜色
+            color: '#000000ff',
+            // 背景色
+            backgroundColor: null,
+            // 字体
+            fontFamily: 'TitanOne',
+            // 字体样式，斜体等等
+            fontStyle: 'italic',
+            // 粗细
+            fontWeight: 700,
+            // 字体大小
+            fontSize: 40,
+            // 行高
+            lineHeight: 1,
+            // 行距
+            letterSpacing: 0,
+            // 文本方向
+            textDecoration: 'underline',
+            // 写入模式
+            writingMode: 'horizontal-tb',
+            // 对齐方式
+            textAlign: 'center',
+            // 垂直对齐方式
+            verticalAlign: 'middle',
+            // 文字阴影
+            textShadow: null
           }
         }
       }
