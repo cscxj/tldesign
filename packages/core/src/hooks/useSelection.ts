@@ -1,7 +1,19 @@
-import { TLBounds, TLPage, TLPageState } from '@/types'
+import { TLBounds, TLPage, TLPageState, TLShape } from '@/types'
 import { Utils } from '@/utils'
+import { TLShapeUtil, TLShapeUtilsMap } from '..'
 
-export function useSelection(page: TLPage, pageState: TLPageState) {
+function getShapeUtils<T extends TLShape>(
+  shapeUtils: TLShapeUtilsMap<T>,
+  shape: T
+) {
+  return shapeUtils[shape.type as T['type']] as unknown as TLShapeUtil<T>
+}
+
+export function useSelection<S extends TLShape>(
+  page: TLPage<S>,
+  pageState: TLPageState,
+  shapeUtils: TLShapeUtilsMap<S>
+) {
   const { selectedIds } = pageState
 
   let bounds: TLBounds | undefined = undefined
@@ -15,16 +27,19 @@ export function useSelection(page: TLPage, pageState: TLPageState) {
       )
     }
 
-    bounds = shape.bounds
+    bounds = getShapeUtils(shapeUtils, shape).getBounds(shape)
   } else if (selectedIds.length > 1) {
     const selectedShapes = selectedIds.map((id) => page.shapes[id])
 
-    bounds = selectedShapes.reduce((acc, { bounds }, i) => {
-      bounds = Utils.getBoundsFromPoints(Utils.getRotatedCorners(bounds))
+    bounds = selectedShapes.reduce((acc, shape, i) => {
+      const bounds = getShapeUtils(shapeUtils, shape).getBounds(shape)
+      const warpBounds = Utils.getBoundsFromPoints(
+        Utils.getRotatedCorners(bounds)
+      )
       if (i === 0) {
-        return bounds
+        return warpBounds
       }
-      return Utils.getExpandedBounds(acc, bounds)
+      return Utils.getExpandedBounds(acc, warpBounds)
     }, {} as TLBounds)
   }
   return { bounds }

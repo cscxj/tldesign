@@ -6,8 +6,8 @@ export const RectComponent = TLShapeUtil.Component<RectShape, SVGSVGElement>(
     return (
       <SVGContainer ref={ref} {...events}>
         <rect
-          width={shape.bounds.width}
-          height={shape.bounds.height}
+          width={shape.size[0]}
+          height={shape.size[1]}
           stroke={shape.color}
           strokeWidth={2}
           strokeLinejoin="round"

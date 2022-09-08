@@ -28,15 +28,9 @@ export class TranslateSession extends BaseSession {
     const delta: Point = Vec.sub(currentPoint, originPoint)
 
     this.initialShapes.forEach((shape) => {
-      const [x, y] = Vec.toFixed(
-        Vec.add([shape.bounds.x, shape.bounds.y], delta)
-      )
+      const point = Vec.toFixed(Vec.add(shape.point, delta))
       nextShapes[shape.id] = {
-        bounds: {
-          ...shape.bounds,
-          x,
-          y
-        }
+        point
       }
     })
 

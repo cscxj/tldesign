@@ -1,8 +1,15 @@
-import type { TLComponentProps, TLForwardedRef, TLShape } from '@/types'
+import type {
+  TLBounds,
+  TLComponentProps,
+  TLForwardedRef,
+  TLShape
+} from '@/types'
 import React from 'react'
 
 export abstract class TLShapeUtil<S extends TLShape> {
   abstract Component: React.ForwardRefExoticComponent<TLComponentProps<S>>
+
+  abstract getBounds(shape: S): TLBounds
 
   /* --------------------- Static --------------------- */
 

@@ -29,11 +29,14 @@ export class BrushSession extends BaseSession {
             this.initialSelectedIds.has(shape.parentId)
           )
       )
-      .map((shape) => ({
-        id: shape.id,
-        bounds: shape.bounds,
-        selectId: shape.id
-      }))
+      .map((shape) => {
+        const util = this.app.getShapeUtil(shape)
+        return {
+          id: shape.id,
+          bounds: util.getBounds(shape),
+          selectId: shape.id
+        }
+      })
 
     this.update()
   }

@@ -1,4 +1,4 @@
-import { TLPage, TLPageState, TLShape } from '@tldesign/core'
+import { Point, TLPage, TLPageState, TLShape } from '@tldesign/core'
 
 // shapes
 
@@ -33,6 +33,7 @@ export interface TDBaseShape extends TLShape {
 
 export interface ImageShape extends TDBaseShape {
   type: TDShapeType.Image
+  size: Point
   assetId: string
 }
 
@@ -81,6 +82,7 @@ export interface TextShape extends TDBaseShape {
 
 export interface GroupShape extends TDBaseShape {
   type: TDShapeType.Group
+  size: Point
 }
 
 export type TDShape = ImageShape | TextShape | GroupShape

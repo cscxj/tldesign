@@ -13,8 +13,10 @@ export const Shape = function Shape({ util, shape, ...rest }: ShapeProps) {
 
   const context = useRendererContext()
 
+  const bounds = util.getBounds(shape)
+
   return (
-    <Container bounds={shape.bounds}>
+    <Container bounds={bounds}>
       <RenderedShape
         util={util}
         shape={shape}

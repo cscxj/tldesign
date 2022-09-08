@@ -232,12 +232,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
           group1: {
             id: 'group1',
             type: TDShapeType.Group,
-            bounds: {
-              width: 200,
-              height: 200,
-              x: 100,
-              y: 100
-            },
+            point: [100, 100],
+            size: [200, 200],
             parentId: 'page1',
             childIndex: 1,
             children: ['image1', 'image2']
@@ -247,14 +243,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             type: TDShapeType.Image,
             assetId:
               'https://gd-ai-application.dancf.com/temp/3edaf84e08e52a07c852f70725b17ba6.png',
-            bounds: {
-              width: 100,
-              height: 100,
-              x: 100,
-              y: 100,
-              rotation: 0,
-              skew: 0
-            },
+            point: [100, 100],
+            size: [100, 100],
             parentId: 'group1',
             childIndex: 1
           },
@@ -263,14 +253,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             type: TDShapeType.Image,
             assetId:
               'https://gd-ai-application.dancf.com/temp/e62fb408085b8a93b9e1edeca31e90af.png',
-            bounds: {
-              width: 100,
-              height: 100,
-              x: 200,
-              y: 200,
-              rotation: 0,
-              skew: 0
-            },
+            point: [200, 200],
+            size: [100, 100],
             parentId: 'group1',
             childIndex: 1
           },
@@ -279,14 +263,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             type: TDShapeType.Image,
             assetId:
               'https://img.tusij.com/ips_asset/btw/01/00/44/5bc2cd6000692/5bc2cd600761f.png!w700?auth_key=1687392000-0-0-5014bfff814ed086d1e84ae6bcbd4638',
-            bounds: {
-              width: 100,
-              height: 100,
-              x: 400,
-              y: 100,
-              rotation: 0,
-              skew: 0
-            },
+            point: [400, 100],
+            size: [100, 100],
             parentId: 'page1',
             childIndex: 1
           },
@@ -295,14 +273,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             type: TDShapeType.Image,
             assetId:
               'https://img.tusij.com/ips_asset/ibt/18/43/03/5d4c1f3806c40.png!w700?auth_key=1687392000-0-0-e0a9e22d7d79a054c3c89af8b5a6d6ad',
-            bounds: {
-              width: 100,
-              height: 100,
-              x: 600,
-              y: 100,
-              rotation: 0,
-              skew: 0
-            },
+            point: [600, 100],
+            size: [100, 100],
             parentId: 'page1',
             childIndex: 1
           },
@@ -310,12 +282,7 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
             id: 'text1',
             type: TDShapeType.Text,
             text: '中秋快乐',
-            bounds: {
-              width: 200,
-              height: 40,
-              x: 400,
-              y: 300
-            },
+            point: [400, 300],
             parentId: 'page1',
             childIndex: 1,
             // 颜色

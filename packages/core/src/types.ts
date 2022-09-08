@@ -24,8 +24,10 @@ export enum TLScaleHandle {
 export type TLBoundsHandle = TLScaleHandle | 'rotate'
 
 export interface TLBounds {
-  x: number
-  y: number
+  minX: number
+  minY: number
+  maxX: number
+  maxY: number
   width: number
   height: number
   rotation?: number
@@ -34,10 +36,29 @@ export interface TLBounds {
 
 export interface TLShape {
   id: string
+  /**
+   * 父元素id
+   */
   parentId: string
+  /**
+   * 类型
+   */
   type: string
+  /**
+   * 层级
+   */
   childIndex: number
-  bounds: TLBounds
+  /**
+   * 位置
+   */
+  point: Point
+  /**
+   * 旋转角度
+   */
+  rotation?: number
+  /**
+   * 子元素
+   */
   children?: string[]
 }
 

@@ -33,9 +33,10 @@ export class RotateSession extends BaseSession {
     )
     this.commonBoundsCenter = Utils.getBoundsCenter(
       Utils.getCommonBounds(
-        initialShapes.map((shape) =>
-          Utils.getBoundsFromPoints(Utils.getRotatedCorners(shape.bounds))
-        )
+        initialShapes.map((shape) => {
+          const bounds = this.app.getShapeUtil(shape).getBounds(shape)
+          return Utils.getBoundsFromPoints(Utils.getRotatedCorners(bounds))
+        })
       )
     )
 
@@ -59,14 +60,15 @@ export class RotateSession extends BaseSession {
     const shapes: Record<string, Partial<TDShape>> = {}
     // 更新图形
     initialShapes.forEach((shape) => {
+      const bounds = this.app.getShapeUtil(shape).getBounds(shape)
       const changed = Utils.getRotatedBounds(
-        shape.bounds,
+        bounds,
         commonBoundsCenter,
         angleDelta
       )
       shapes[shape.id] = {
-        ...shape,
-        bounds: changed
+        point: [changed.minX, changed.minY],
+        rotation: changed.rotation
       }
     })
 

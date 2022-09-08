@@ -12,8 +12,8 @@ export const Container = ({ children, bounds }: ContainerProps) => {
     const el = rPositioned.current!
     const transform = `
         translate(
-            calc(${bounds.x}px - var(--tl-padding)),
-            calc(${bounds.y}px - var(--tl-padding))
+            calc(${bounds.minX}px - var(--tl-padding)),
+            calc(${bounds.minY}px - var(--tl-padding))
         )
         rotate(${bounds.rotation || 0}rad)
     `

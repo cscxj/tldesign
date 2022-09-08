@@ -16,7 +16,7 @@ interface PageProps {
 export const Page = ({ page, pageState }: PageProps) => {
   const { shapeUtils } = useRendererContext()
   const shapeTree = useShapeTree(page, pageState)
-  const { bounds } = useSelection(page, pageState)
+  const { bounds } = useSelection(page, pageState, shapeUtils)
 
   const { hoveredId, selectedIds } = pageState
   const selectShapes = selectedIds.map((id) => page.shapes[id])

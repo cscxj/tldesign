@@ -11,28 +11,30 @@ export function getBoundsFromPoints(
   points: Point[],
   rotation?: number
 ): TLBounds {
-  let x0 = Infinity
-  let y0 = Infinity
-  let x1 = -Infinity
-  let y1 = -Infinity
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
 
   if (points.length < 2) {
-    x0 = 0
-    y0 = 0
+    minX = 0
+    minY = 0
   } else {
     for (const [x, y] of points) {
-      x0 = Math.min(x, x0)
-      y0 = Math.min(y, y0)
-      x1 = Math.max(x, x1)
-      y1 = Math.max(y, y1)
+      minX = Math.min(x, minX)
+      minY = Math.min(y, minY)
+      maxX = Math.max(x, maxX)
+      maxY = Math.max(y, maxY)
     }
   }
 
   return {
-    x: x0,
-    y: y0,
-    width: Math.max(1, x1 - x0),
-    height: Math.max(1, y1 - y0),
+    minX,
+    minY,
+    maxX,
+    maxY,
+    width: Math.max(1, maxX - minX),
+    height: Math.max(1, maxY - minY),
     rotation
   }
 }
@@ -44,13 +46,13 @@ export function getBoundsFromPoints(
  * @returns
  */
 export function getRotatedCorners(b: TLBounds): Point[] {
-  const center: Point = [b.x + b.width / 2, b.y + b.height / 2]
+  const center: Point = getBoundsCenter(b)
 
   return (<Point[]>[
-    [b.x, b.y],
-    [b.x + b.width, b.y],
-    [b.x + b.width, b.y + b.height],
-    [b.x, b.y + b.height]
+    [b.minX, b.minY],
+    [b.maxX, b.minY],
+    [b.maxX, b.maxY],
+    [b.minX, b.maxY]
   ]).map((point) => Vec.rotWith(point, center, b.rotation))
 }
 
@@ -61,9 +63,7 @@ export function getRotatedCorners(b: TLBounds): Point[] {
  * @returns
  */
 export function pointInBounds(A: Point, b: TLBounds): boolean {
-  return (
-    A[0] > b.x && A[0] < b.x + b.width && A[1] > b.y && A[1] < b.y + b.height
-  )
+  return A[0] > b.minX && A[0] < b.maxX && A[1] > b.minY && A[1] < b.maxY
 }
 
 /**
@@ -73,22 +73,22 @@ export function pointInBounds(A: Point, b: TLBounds): boolean {
  * @returns
  */
 export function getExpandedBounds(a: TLBounds, b: TLBounds): TLBounds {
-  const x = Math.min(a.x, b.x)
-  const y = Math.min(a.y, b.y)
-  const maxX = Math.max(a.x + a.width, b.x + b.width)
-  const maxY = Math.max(a.y + a.height, b.y + b.height)
-  const width = Math.abs(maxX - x)
-  const height = Math.abs(maxY - y)
+  const minX = Math.min(a.minX, b.minX)
+  const minY = Math.min(a.minY, b.minY)
+  const maxX = Math.max(a.maxX, b.maxX)
+  const maxY = Math.max(a.maxY, b.maxY)
+  const width = Math.abs(maxX - minX)
+  const height = Math.abs(maxY - minY)
 
-  return { x, y, width, height }
+  return { minX, minY, maxX, maxY, width, height }
 }
 
 /**
  * 获取边界中心点
  * @param bounds
  */
-export function getBoundsCenter(bounds: TLBounds): Point {
-  return [bounds.x + bounds.width / 2, bounds.y + bounds.height / 2]
+export function getBoundsCenter(b: TLBounds): Point {
+  return [b.minX + b.width / 2, b.minY + b.height / 2]
 }
 
 /**
@@ -123,18 +123,26 @@ export function getRotatedBounds(
 
   const center = getBoundsCenter(bounds)
   // 相对中心的位置
-  const relativeCenter = Vec.sub(center, [bounds.x, bounds.y])
+  const startPointRelativeCenter = Vec.sub(center, [bounds.minX, bounds.minY])
+  const endPointRelativeCenter = Vec.sub(center, [bounds.maxX, bounds.maxY])
   // 中心旋转之后的位置
   const rotatedCenter = Vec.rotWith(center, origin, theta)
   // 旋转之后的位置
-  const [x, y] = Vec.toFixed(Vec.sub(rotatedCenter, relativeCenter))
+  const [minX, minY] = Vec.toFixed(
+    Vec.sub(rotatedCenter, startPointRelativeCenter)
+  )
+  const [maxX, maxY] = Vec.toFixed(
+    Vec.sub(rotatedCenter, endPointRelativeCenter)
+  )
 
   const nextRotation = clampRadians((bounds.rotation || 0) + theta)
 
   return {
     ...bounds,
-    x,
-    y,
+    minX,
+    minY,
+    maxX,
+    maxY,
     rotation: nextRotation
   }
 }

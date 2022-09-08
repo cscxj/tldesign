@@ -12,6 +12,7 @@ export class ScaleSession extends BaseSession {
    */
   readonly initialShapes: {
     shape: TDShape
+    bounds: TLBounds
     // 相对于缩放原点的位置,
     // 以commonBounds的宽和高分别为x、y轴，scaleOrigin为坐标原点
     relativeOrigin: Point
@@ -48,20 +49,26 @@ export class ScaleSession extends BaseSession {
 
     const isSingle = selectedIds.length === 1
 
-    this.initialCommonBounds = isSingle
-      ? this.app.getShape(selectedIds[0]).bounds
-      : Utils.getCommonBounds(
-          initialShapes.map((shape) =>
-            Utils.getBoundsFromPoints(Utils.getRotatedCorners(shape.bounds))
-          )
-        )
+    let commonBounds: TLBounds
+    if (isSingle) {
+      const targetShape = this.app.getShape(selectedIds[0])
+      commonBounds = this.app.getShapeUtil(targetShape).getBounds(targetShape)
+    } else {
+      commonBounds = Utils.getCommonBounds(
+        initialShapes.map((shape) => {
+          const bounds = this.app.getShapeUtil(shape).getBounds(shape)
+          return Utils.getBoundsFromPoints(Utils.getRotatedCorners(bounds))
+        })
+      )
+    }
+    this.initialCommonBounds = commonBounds
 
     // 计算缩放原点
-    const { x, y, width, height, rotation } = this.initialCommonBounds
+    const { minX, minY, width, height, rotation } = this.initialCommonBounds
     const rX = width / 2
     const rH = height / 2
-    let originX = x + rX
-    let originY = y + rH
+    let originX = minX + rX
+    let originY = minY + rH
     // 公共边界中点
     const commonBoundsCenter: Point = [originX, originY]
     if (handleId & TLScaleHandle.Left) {
@@ -83,18 +90,17 @@ export class ScaleSession extends BaseSession {
 
     // 计算所选图形的初始信息
     this.initialShapes = initialShapes.map((shape) => {
+      const bounds = this.app.getShapeUtil(shape).getBounds(shape)
       // 当前图形的位置被设为是已经旋转过的，所以初始位置应该做一次反旋转
       const unRotatedShapeBounds = Utils.getRotatedBounds(
-        shape.bounds,
+        bounds,
         commonBoundsCenter,
         -(rotation || 0)
       )
 
       return {
-        shape: {
-          ...shape,
-          bounds: unRotatedShapeBounds
-        },
+        shape,
+        bounds: unRotatedShapeBounds,
         relativeOrigin: Vec.sub(
           Utils.getBoundsCenter(unRotatedShapeBounds),
           origin
@@ -176,12 +182,11 @@ export class ScaleSession extends BaseSession {
      * 2. 缩放图形
      */
     const shapes: Record<string, Partial<TDShape>> = {}
-    initialShapes.forEach(({ shape, relativeOrigin }) => {
-      let { x, y } = shape.bounds
-      const { width, height } = shape.bounds
+    initialShapes.forEach(({ shape, bounds, relativeOrigin }) => {
+      const { width, height } = bounds
 
       // 缩放宽和高
-      const [w, h] = Vec.mulV([width, height], [scaleW, scaleH])
+      const newSize = Vec.mulV([width, height], [scaleW, scaleH])
 
       // 旋转原点 -> 图形中心点
       relativeOrigin = Vec.mulV(relativeOrigin, [scaleW, scaleH])
@@ -191,21 +196,12 @@ export class ScaleSession extends BaseSession {
         scaleOrigin,
         Vec.rotWith(relativeOrigin, [0, 0], rotation) // 坐标系再转回去
       )
-      ;[x, y] = Vec.sub(shapeCenter, [w / 2, h / 2])
+      const newPoint = Vec.sub(shapeCenter, [newSize[0] / 2, newSize[1] / 2])
 
-      const currentShape = this.app.getShape(shape.id)
-
-      const newBounds: TLBounds = {
-        ...currentShape.bounds,
-        width: w,
-        height: h,
-        x,
-        y
-      }
-
+      const util = this.app.getShapeUtil(shape)
       shapes[shape.id] = {
-        ...currentShape,
-        bounds: newBounds
+        ...util.getSizeMutation(newSize),
+        point: newPoint
       }
     })
 

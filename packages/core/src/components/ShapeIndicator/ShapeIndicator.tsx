@@ -1,3 +1,4 @@
+import { useRendererContext } from '@/hooks/useRendererContext'
 import { TLShape } from '@/types'
 import { Container } from '../Container'
 
@@ -6,11 +7,13 @@ interface ShapeIndicatorProps {
 }
 
 export const ShapeIndicator = ({ shape }: ShapeIndicatorProps) => {
-  const {
-    bounds: { width, height }
-  } = shape
+  const { shapeUtils } = useRendererContext()
+  const util = shapeUtils[shape.type]
+  const bounds = util.getBounds(shape)
+
+  const { width, height } = bounds
   return (
-    <Container bounds={shape.bounds}>
+    <Container bounds={bounds}>
       <svg width="100%" height="100%">
         <g className="tl-centered-g" fill="transparent">
           <rect

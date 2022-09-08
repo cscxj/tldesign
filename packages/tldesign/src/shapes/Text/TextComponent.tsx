@@ -83,7 +83,6 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
     const handleChange = React.useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = e.currentTarget.value
-        const currentBounds = shape.bounds
         // todo
       },
       []

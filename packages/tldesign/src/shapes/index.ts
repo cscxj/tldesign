@@ -1,4 +1,5 @@
 import { TDShape, TDShapeType } from '@/types'
+import { TLShapeUtil } from '@tldesign/core'
 import { GroupUtil } from './Group'
 import { ImageUtil } from './Image'
 import { TDShapeUtil } from './TDShapeUtil'
@@ -9,7 +10,7 @@ export const Text = new TextUtil()
 export const Group = new GroupUtil()
 
 export type TDShapeUtilsMap = {
-  [key in TDShape['type']]: TDShapeUtil<Extract<TDShape, { type: key }>>
+  [key in TDShape['type']]: TLShapeUtil<Extract<TDShape, { type: key }>>
 }
 
 export const shapeUtils: TDShapeUtilsMap = {
@@ -18,6 +19,8 @@ export const shapeUtils: TDShapeUtilsMap = {
   [TDShapeType.Group]: Group
 }
 
-export function getShapeUtil<S extends TDShape>(shape: S) {
-  return shapeUtils[shape.type]
+export function getShapeUtil<S extends TDShape>(shape: S | S['type']) {
+  if (typeof shape === 'string')
+    return shapeUtils[shape] as unknown as TDShapeUtil<S>
+  return shapeUtils[shape.type] as unknown as TDShapeUtil<S>
 }
