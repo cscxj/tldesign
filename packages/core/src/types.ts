@@ -45,6 +45,8 @@ export interface IShapeTreeNode {
   shape: TLShape
   children: IShapeTreeNode[]
   isSelected: boolean
+  isHovered: boolean
+  isEditing: boolean
 }
 
 export interface TLPage<S extends TLShape = TLShape> {
@@ -69,6 +71,10 @@ export interface TLPageState {
 export interface TLComponentProps<S extends TLShape> {
   shape: S
   events: TLShapeEvents
+  isEditing: boolean
+  isHovered: boolean
+  isSelected: boolean
+  onShapeChange?: TLShapeChangeHandler<S, any>
 }
 
 export interface TLPointerInfo<T extends TLEventTarget> {
@@ -108,7 +114,12 @@ export type TLBoundsHandleEventHandler = (
 export type TLKeyboardEventHandler = (info: TLKeyboardInfo) => void
 export type TLDropEventHandler = (e: React.DragEvent<Element>) => void
 
-export interface TLEvents {
+export type TLShapeChangeHandler<S, K = any> = (
+  shape: { id: string } & Partial<S>,
+  info?: K
+) => void
+
+export interface TLEvents<S extends TLShape> {
   // Shape
   onPointShape: TLShapeEventsHandler
   onHoverShape: TLShapeEventsHandler
@@ -153,6 +164,9 @@ export interface TLEvents {
   // Keyboard
   onKeyDown: TLKeyboardEventHandler
   onKeyUp: TLKeyboardEventHandler
+
+  // other
+  onShapeChange: TLShapeChangeHandler<S, any>
 }
 
 export interface TLShapeEvents<E = any> {

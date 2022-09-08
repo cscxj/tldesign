@@ -28,6 +28,7 @@ export function TlDesign() {
         onPointShape={app.onPointShape}
         onHoverShape={app.onHoverShape}
         onUnHoverShape={app.onUnHoverShape}
+        onDoubleClickShape={app.onDoubleClickShape}
         // bounds
         onPointBounds={app.onPointBounds}
         onReleaseBounds={app.onReleaseBounds}
@@ -35,6 +36,8 @@ export function TlDesign() {
         onPointBoundsHandle={app.onPointBoundsHandle}
         // canvas
         onPointCanvas={app.onPointCanvas}
+        // other
+        onShapeChange={app.onShapeChange}
       ></Renderer>
       <div>{appState.status}</div>
     </TlDesignContext.Provider>

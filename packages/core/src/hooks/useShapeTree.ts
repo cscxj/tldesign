@@ -9,7 +9,9 @@ function addToShapeTree(
   const node: IShapeTreeNode = {
     shape,
     children: [],
-    isSelected: pageState.selectedIds.includes(shape.id)
+    isSelected: pageState.selectedIds.includes(shape.id),
+    isEditing: pageState.editingId === shape.id,
+    isHovered: pageState.hoveredId === shape.id
   }
   branch.push(node)
   if (shape.children) {

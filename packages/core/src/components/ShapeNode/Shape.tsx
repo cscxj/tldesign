@@ -1,3 +1,4 @@
+import { useRendererContext } from '@/hooks/useRendererContext'
 import { useShapeEvents } from '@/hooks/useShapeEvents'
 import { TLShapeUtil } from '@/TLShapeUtil'
 import { IShapeTreeNode, TLComponentProps, TLShape } from '@/types'
@@ -7,11 +8,20 @@ interface ShapeProps extends Omit<IShapeTreeNode, 'children'> {
   util: TLShapeUtil<TLShape>
 }
 
-export const Shape = function Shape({ util, shape }: ShapeProps) {
+export const Shape = function Shape({ util, shape, ...rest }: ShapeProps) {
   const events = useShapeEvents(shape.id)
+
+  const context = useRendererContext()
+
   return (
     <Container bounds={shape.bounds}>
-      <RenderedShape util={util} shape={shape} events={events}></RenderedShape>
+      <RenderedShape
+        util={util}
+        shape={shape}
+        events={events}
+        {...rest}
+        onShapeChange={context.events.onShapeChange}
+      ></RenderedShape>
     </Container>
   )
 }

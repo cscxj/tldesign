@@ -6,6 +6,7 @@ import {
   TLPageState,
   TLPointerEventHandler,
   TLScaleHandle,
+  TLShapeChangeHandler,
   TLShapeEventsHandler
 } from '@tldesign/core'
 import { DEAD_ZONE } from './constance'
@@ -81,6 +82,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     return this.pageState.hoveredId
   }
 
+  get editingId(): string | undefined | null {
+    return this.pageState.editingId
+  }
+
   get shapes(): TDShape[] {
     return Object.values(this.page.shapes)
   }
@@ -134,6 +139,21 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
         }
       },
       'set_hovered_id'
+    )
+  }
+
+  setEditingId(id?: string) {
+    this.patchState(
+      {
+        document: {
+          pageStates: {
+            [this.currentPageId]: {
+              editingId: id
+            }
+          }
+        }
+      },
+      `set_editing_id`
     )
   }
 
@@ -414,6 +434,12 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     this.setHoveredId(undefined)
   }
 
+  onDoubleClickShape: TLShapeEventsHandler = (info) => {
+    if (this.editingId !== info.target) {
+      this.setEditingId(info.target)
+    }
+  }
+
   // bound events
 
   onPointBounds: TLBoundsEventHandler = () => {
@@ -440,7 +466,30 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   onPointCanvas: TLCanvasEventHandler = (info) => {
     this.updateInputs(info)
     this.selectNone()
+    if (this.editingId) {
+      this.setEditingId(undefined)
+    }
     this.setStatus(TDStatus.PointingCanvas)
+  }
+
+  // other
+  onShapeChange: TLShapeChangeHandler<TDShape> = (shapePatch) => {
+    const shape = this.getShape(shapePatch.id)
+    const shapeToUpdate = { ...shape, ...shapePatch }
+    return this.patchState(
+      {
+        document: {
+          pages: {
+            [this.currentPageId]: {
+              shapes: {
+                [shape.id]: shapeToUpdate
+              }
+            }
+          }
+        }
+      },
+      'patched_shapes'
+    )
   }
 
   /** ---------------------- session start ------------------------------ */

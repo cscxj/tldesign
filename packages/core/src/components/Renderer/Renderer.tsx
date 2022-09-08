@@ -6,7 +6,7 @@ import { TLEvents, TLPage, TLPageState, TLShape } from '@/types'
 import { useState } from 'react'
 import { Canvas } from '../Canvas'
 
-export interface RendererProps<S extends TLShape> extends Partial<TLEvents> {
+export interface RendererProps<S extends TLShape> extends Partial<TLEvents<S>> {
   id?: string
   shapeUtils: TLShapeUtilsMap<S>
   page: TLPage<S>
@@ -25,7 +25,7 @@ export const Renderer = <S extends TLShape>({
   const [context] = useState<IRendererContext>({
     id,
     shapeUtils: shapeUtils as unknown as TLShapeUtilsMap<TLShape>,
-    events: rest,
+    events: rest as unknown as TLEvents<TLShape>,
     inputs: new Inputs()
   })
 
