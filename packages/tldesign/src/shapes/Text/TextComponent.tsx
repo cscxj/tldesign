@@ -113,6 +113,7 @@ export function getTextStyle({
     padding: `${TEXT_SHAPE_PADDING}px`,
     wordBreak: 'break-all',
     whiteSpace: 'normal',
-    outline: 'none'
+    outline: 'none',
+    userSelect: 'none'
   }
 }
