@@ -15,7 +15,6 @@
     "@tldesign/core": "workspace:*",
     "@tldesign/intersect": "workspace:*",
     "@tldesign/vec": "workspace:*",
-    "react-contenteditable": "^3.3.6",
     "zustand": "^4.1.1"
   }
 }

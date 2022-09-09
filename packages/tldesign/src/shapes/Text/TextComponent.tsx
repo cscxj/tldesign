@@ -2,9 +2,10 @@ import { TEXT_SHAPE_PADDING } from '@/constance'
 import { TextShape } from '@/types'
 import { CSSProperties, styled } from '@stitches/react'
 import { HtmlContainer, TLShapeUtil, Utils } from '@tldesign/core'
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { ContentEditable, ContentEditableChangeEvent } from './ContentEditable'
 import { Text } from '..'
 import Vec from '@tldesign/vec'
+import React from 'react'
 
 const Wrapper = styled('div', {
   width: '100%',
@@ -16,7 +17,7 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
   ({ shape, events, isEditing, onShapeChange }, ref) => {
     const textStyle = getTextStyle(shape)
 
-    const handleChange = (e: ContentEditableEvent) => {
+    const handleChange = (e: ContentEditableChangeEvent) => {
       const newText = e.target.value
 
       // 计算旋转之后的偏移
@@ -48,6 +49,13 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
       })
     }
 
+    const textEditorRef = React.useRef<HTMLDivElement>()
+    React.useEffect(() => {
+      if (isEditing) {
+        textEditorRef.current && selectText(textEditorRef.current)
+      }
+    }, [isEditing])
+
     return (
       <HtmlContainer ref={ref} {...events}>
         <Wrapper>
@@ -57,12 +65,21 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
             tagName="div"
             onChange={handleChange}
             style={textStyle}
+            innerRef={textEditorRef}
           ></ContentEditable>
         </Wrapper>
       </HtmlContainer>
     )
   }
 )
+
+function selectText(node: HTMLElement) {
+  const selection = window.getSelection()
+  const range = document.createRange()
+  range.selectNodeContents(node)
+  selection?.removeAllRanges()
+  selection?.addRange(range)
+}
 
 export function getTextStyle({
   color,
