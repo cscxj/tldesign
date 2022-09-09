@@ -39,7 +39,10 @@ export interface ImageShape extends TDBaseShape {
 
 export interface TextShape extends TDBaseShape {
   type: TDShapeType.Text
+  // 文本内容
   text: string
+  // 宽度
+  width: number
   // 颜色
   color: string
   // 背景色

@@ -183,24 +183,37 @@ export class ScaleSession extends BaseSession {
      */
     const shapes: Record<string, Partial<TDShape>> = {}
     initialShapes.forEach(({ shape, bounds, relativeOrigin }) => {
-      const { width, height } = bounds
+      const util = this.app.getShapeUtil(shape)
 
-      // 缩放宽和高
-      const newSize = Vec.mulV([width, height], [scaleW, scaleH])
+      // 大小变化
+      const sizeMutation = util.getScaleMutation(shape, bounds, [
+        scaleW,
+        scaleH
+      ])
+
+      const scaledBounds = util.getBounds({ ...shape, ...sizeMutation })
+
+      // 计算图形的宽高缩放比例
+      const shapeScale = Vec.divV(
+        [scaledBounds.width, scaledBounds.height],
+        [bounds.width, bounds.height]
+      )
 
       // 旋转原点 -> 图形中心点
-      relativeOrigin = Vec.mulV(relativeOrigin, [scaleW, scaleH])
+      relativeOrigin = Vec.mulV(relativeOrigin, shapeScale)
 
       // 新的图形中心位置
       const shapeCenter = Vec.add(
         scaleOrigin,
         Vec.rotWith(relativeOrigin, [0, 0], rotation) // 坐标系再转回去
       )
-      const newPoint = Vec.sub(shapeCenter, [newSize[0] / 2, newSize[1] / 2])
+      const newPoint = Vec.sub(shapeCenter, [
+        scaledBounds.width / 2,
+        scaledBounds.height / 2
+      ])
 
-      const util = this.app.getShapeUtil(shape)
       shapes[shape.id] = {
-        ...util.getSizeMutation(newSize),
+        ...sizeMutation,
         point: newPoint
       }
     })

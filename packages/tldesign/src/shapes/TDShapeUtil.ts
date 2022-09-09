@@ -5,7 +5,11 @@ import { Point, TLBounds, TLShapeUtil, Utils } from '@tldesign/core'
 export abstract class TDShapeUtil<S extends TDShape> extends TLShapeUtil<S> {
   abstract type: TDShapeType
 
-  abstract getSizeMutation(size: Point): Partial<S>
+  abstract getScaleMutation(
+    initialShape: S,
+    bounds: TLBounds,
+    scale: Point
+  ): Partial<Omit<S, 'type'>>
 
   /**
    * 是否命中框选的区域

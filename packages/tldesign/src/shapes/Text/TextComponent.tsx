@@ -1,3 +1,4 @@
+import { TEXT_SHAPE_PADDING } from '@/constance'
 import { TextShape } from '@/types'
 import { styled } from '@stitches/react'
 import { HtmlContainer, TLShapeUtil } from '@tldesign/core'
@@ -48,37 +49,7 @@ const TextArea = styled('textarea', {
 
 export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
   ({ shape, events, isEditing, onShapeChange }, ref) => {
-    const {
-      color,
-      backgroundColor,
-      fontFamily,
-      fontSize,
-      fontWeight,
-      fontStyle,
-      lineHeight,
-      letterSpacing,
-      textDecoration,
-      writingMode,
-      textAlign,
-      verticalAlign,
-      textShadow
-    } = shape
-
-    const textStyle: React.CSSProperties = {
-      color,
-      backgroundColor: backgroundColor ?? 'none',
-      fontFamily,
-      fontSize: `${fontSize}px`,
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-      lineHeight,
-      letterSpacing,
-      textDecoration,
-      writingMode,
-      textAlign,
-      verticalAlign,
-      textShadow: textShadow ?? 'none'
-    }
+    const textStyle = getTextStyle(shape)
 
     const handleChange = React.useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -91,11 +62,11 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
     return (
       <HtmlContainer ref={ref} {...events}>
         <Wrapper>
-          <div style={textStyle}>
+          <div style={textStyle} id={`tl-text-${shape.id}`}>
             {isEditing ? (
               <TextArea onChange={handleChange} defaultValue={shape.text} />
             ) : (
-              shape.text
+              <span style={{ userSelect: 'none' }}>{shape.text}</span>
             )}
           </div>
         </Wrapper>
@@ -103,3 +74,36 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
     )
   }
 )
+
+export function getTextStyle({
+  color,
+  backgroundColor,
+  fontFamily,
+  fontSize,
+  fontWeight,
+  fontStyle,
+  lineHeight,
+  letterSpacing,
+  textDecoration,
+  writingMode,
+  textAlign,
+  verticalAlign,
+  textShadow
+}: TextShape): React.CSSProperties {
+  return {
+    color,
+    backgroundColor: backgroundColor ?? 'none',
+    fontFamily,
+    fontSize: `${fontSize}px`,
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
+    lineHeight,
+    letterSpacing,
+    textDecoration,
+    writingMode,
+    textAlign,
+    verticalAlign,
+    textShadow: textShadow ?? 'none',
+    padding: `${TEXT_SHAPE_PADDING}px`
+  }
+}

@@ -281,7 +281,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
           text1: {
             id: 'text1',
             type: TDShapeType.Text,
-            text: '中秋快乐',
+            text: '输入文字',
+            width: 100,
             point: [400, 300],
             parentId: 'page1',
             childIndex: 1,

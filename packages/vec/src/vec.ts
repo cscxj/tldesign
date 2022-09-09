@@ -11,6 +11,16 @@ export function div(A: Point, n: number): Point {
 }
 
 /**
+ * 向量除以向量
+ * @param A
+ * @param B
+ * @returns
+ */
+export function divV(A: Point, B: Point): Point {
+  return [A[0] / B[0], A[1] / B[1]]
+}
+
+/**
  * 向量A减向量B
  * @param A
  * @param B
