@@ -1,9 +1,10 @@
 import { TEXT_SHAPE_PADDING } from '@/constance'
 import { TextShape } from '@/types'
 import { CSSProperties, styled } from '@stitches/react'
-import { HtmlContainer, TLShapeUtil } from '@tldesign/core'
-import React from 'react'
+import { HtmlContainer, TLShapeUtil, Utils } from '@tldesign/core'
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { Text } from '..'
+import Vec from '@tldesign/vec'
 
 const Wrapper = styled('div', {
   width: '100%',
@@ -15,15 +16,37 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
   ({ shape, events, isEditing, onShapeChange }, ref) => {
     const textStyle = getTextStyle(shape)
 
-    const handleChange = React.useCallback((e: ContentEditableEvent) => {
+    const handleChange = (e: ContentEditableEvent) => {
       const newText = e.target.value
-      // 如果是已旋转的文本，修改文本会导致位置偏移
+
+      // 计算旋转之后的偏移
+      const currentBounds = Text.getBounds(shape)
+      const currentCenter = Utils.getBoundsCenter(currentBounds)
+      const currentRotatedPoint = Vec.rotWith(
+        shape.point,
+        currentCenter,
+        shape.rotation
+      )
+
+      const nextBounds = Text.getBounds({
+        ...shape,
+        text: newText
+      })
+      const nextCenter = Utils.getBoundsCenter(nextBounds)
+      const nextRotatedPoint = Vec.rotWith(
+        shape.point,
+        nextCenter,
+        shape.rotation
+      )
+
+      const offset = Vec.sub(nextRotatedPoint, currentRotatedPoint)
 
       onShapeChange?.({
         id: shape.id,
-        text: newText
+        text: newText,
+        point: Vec.sub(shape.point, offset)
       })
-    }, [])
+    }
 
     return (
       <HtmlContainer ref={ref} {...events}>
