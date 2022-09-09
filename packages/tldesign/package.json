@@ -13,8 +13,9 @@
   "dependencies": {
     "@stitches/react": "^1.2.8",
     "@tldesign/core": "workspace:*",
-    "@tldesign/vec": "workspace:*",
     "@tldesign/intersect": "workspace:*",
+    "@tldesign/vec": "workspace:*",
+    "react-contenteditable": "^3.3.6",
     "zustand": "^4.1.1"
   }
 }

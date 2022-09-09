@@ -52,10 +52,8 @@ function getMeasurementDiv() {
   pre.id = '__textLabelMeasure'
 
   Object.assign(pre.style, {
-    whiteSpace: 'pre-wrap',
     width: 'auto',
     boxSizing: 'border-box',
-    margin: '0px',
     opacity: '0',
     position: 'absolute',
     top: '-500px',
@@ -75,7 +73,7 @@ function getMeasurementDiv() {
 
 function getTextHeight(shape: TextShape): number {
   const mElm = getMeasurementDiv()
-  mElm.textContent = shape.text
+  mElm.innerHTML = shape.text || '&#8203;'
   Object.assign(mElm.style, {
     width: `${shape.width}px`,
     ...getTextStyle(shape)
