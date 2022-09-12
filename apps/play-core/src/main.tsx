@@ -11,14 +11,8 @@ const page: TLPage<Shape> = {
       id: 'rect1',
       type: 'rect',
       color: 'red',
-      bounds: {
-        width: 100,
-        height: 150,
-        x: 100,
-        y: 100,
-        rotation: 0,
-        skew: 0
-      },
+      point: [100, 100],
+      size: [100, 150],
       parentId: 'page1',
       childIndex: 1
     }
