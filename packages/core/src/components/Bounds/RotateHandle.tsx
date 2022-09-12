@@ -12,7 +12,7 @@ export const RotateHandle = ({ bounds }: RotateHandleProps) => {
     <div
       className="tl-rotate-handle"
       style={{
-        transform: `translateY(-${bounds.height / 2 + 20}px)`
+        transform: `translateY(${bounds.height / 2 + 30}px)`
       }}
       {...events}
     >
