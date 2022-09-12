@@ -1,7 +1,12 @@
 import { TEXT_SHAPE_PADDING } from '@/constance'
 import { TextShape } from '@/types'
 import { CSSProperties, styled } from '@stitches/react'
-import { HtmlContainer, TLShapeUtil, Utils } from '@tldesign/core'
+import {
+  DEFAULT_EVENT,
+  HtmlContainer,
+  TLShapeUtil,
+  Utils
+} from '@tldesign/core'
 import { ContentEditable, ContentEditableChangeEvent } from './ContentEditable'
 import { Text } from '..'
 import Vec from '@tldesign/vec'
@@ -56,8 +61,18 @@ export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
       }
     }, [isEditing])
 
+    const editorEvents = {
+      onPointerDown: DEFAULT_EVENT,
+      onPointerUp: DEFAULT_EVENT,
+      onPointerMove: DEFAULT_EVENT,
+      onPointerLeave: events.onPointerLeave,
+      onPointerEnter: events.onPointerEnter
+    }
+
+    const currentEvents = isEditing ? editorEvents : events
+
     return (
-      <HtmlContainer ref={ref} {...events}>
+      <HtmlContainer ref={ref} {...currentEvents}>
         <Wrapper>
           <ContentEditable
             html={shape.text}
