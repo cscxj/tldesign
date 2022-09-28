@@ -41,12 +41,16 @@ const TLCSS = css`
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    background-color: var(--tl-canvas-background);
+    background-color: #ffffff;
     box-sizing: border-box;
   }
 
   .tl-canvas * {
     box-sizing: border-box;
+  }
+
+  .tl-page {
+    background-color: #ffffff;
   }
 
   .tl-container {

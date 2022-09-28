@@ -16,7 +16,8 @@ const page: TLPage<Shape> = {
       parentId: 'page1',
       childIndex: 1
     }
-  }
+  },
+  size: [720, 600]
 }
 
 const pageState: TLPageState = {

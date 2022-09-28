@@ -7,7 +7,10 @@ export class Inputs {
   activePointer?: number
   pointerUpTime = 0
 
-  pointerEnter<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
+  pointerEnter<T extends TLEventTarget>(
+    e: React.PointerEvent | PointerEvent,
+    target: T
+  ) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]
@@ -30,7 +33,10 @@ export class Inputs {
     return info
   }
 
-  pointerDown<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
+  pointerDown<T extends TLEventTarget>(
+    e: React.PointerEvent | PointerEvent,
+    target: T
+  ) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]
@@ -67,7 +73,10 @@ export class Inputs {
     return isDoubleClick
   }
 
-  pointerUp<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
+  pointerUp<T extends TLEventTarget>(
+    e: React.PointerEvent | PointerEvent,
+    target: T
+  ) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const prev = this.pointer
@@ -97,7 +106,10 @@ export class Inputs {
     return info
   }
 
-  pointerMove<T extends TLEventTarget>(e: React.PointerEvent, target: T) {
+  pointerMove<T extends TLEventTarget>(
+    e: React.PointerEvent | PointerEvent,
+    target: T
+  ) {
     const { shiftKey, ctrlKey, metaKey, altKey } = e
 
     const point: Point = [e.clientX, e.clientY]

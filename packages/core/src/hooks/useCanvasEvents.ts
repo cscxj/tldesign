@@ -7,8 +7,7 @@ export function useCanvasEvents() {
   return React.useMemo(() => {
     return {
       onPointerDown: (e: React.PointerEvent) => {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         e.currentTarget.setPointerCapture(e.pointerId)
         const info = inputs.pointerDown(e, 'canvas')
         if (e.button === 0 || e.button === 1) {
@@ -17,8 +16,7 @@ export function useCanvasEvents() {
         }
       },
       onPointerMove: (e: React.PointerEvent) => {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         const info = inputs.pointerMove(e, 'canvas')
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           events.onDragCanvas?.(info)
@@ -26,8 +24,7 @@ export function useCanvasEvents() {
         events.onPointerMove?.(info)
       },
       onPointerUp: (e: React.PointerEvent) => {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         const isDoubleClick = inputs.isDoubleClick()
         const info = inputs.pointerUp(e, 'canvas')
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {

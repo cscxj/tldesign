@@ -8,8 +8,7 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
   return React.useMemo(
     () => ({
       onPointerDown(e) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         const info = inputs.pointerDown(e, id)
         if (e.button === 2) {
           events.onRightPointShape?.(info)
@@ -21,8 +20,7 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
         events.onPointerDown?.(info)
       },
       onPointerUp(e) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         const isDoubleClick = inputs.isDoubleClick()
         const info = inputs.pointerUp(e, id)
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
@@ -35,8 +33,7 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
         events.onPointerUp?.(info)
       },
       onPointerMove(e) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         const info = inputs.pointerMove(e, id)
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           events.onDragShape?.(info)

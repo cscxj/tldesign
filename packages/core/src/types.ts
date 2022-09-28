@@ -74,6 +74,7 @@ export interface TLPage<S extends TLShape = TLShape> {
   id: string
   name?: string
   shapes: Record<string, S>
+  size: Point
 }
 
 export interface TLPageState {

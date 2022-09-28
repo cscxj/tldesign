@@ -228,6 +228,7 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
       page1: {
         id: 'page1',
         name: 'Page 1',
+        size: [720, 600],
         shapes: {
           group1: {
             id: 'group1',

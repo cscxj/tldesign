@@ -7,8 +7,7 @@ export function useBoundsHandleEvents(id: TLBoundsHandle) {
   return React.useMemo(() => {
     return {
       onPointerDown(e: React.PointerEvent) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         if (e.button !== 0) return
         const info = inputs.pointerDown(e, id)
         if (inputs.isDoubleClick() && !(info.altKey || info.metaKey)) {
@@ -18,16 +17,14 @@ export function useBoundsHandleEvents(id: TLBoundsHandle) {
         events.onPointerDown?.(info)
       },
       onPointerUp(e: React.PointerEvent) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         if (e.button !== 0) return
         const info = inputs.pointerUp(e, id)
         events.onReleaseBoundsHandle?.(info)
         events.onPointerUp?.(info)
       },
       onPointerMove(e: React.PointerEvent) {
-        if (e.dead) return
-        else e.dead = true
+        e.stopPropagation()
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           events.onDragBoundsHandle?.(inputs.pointerMove(e, id))
         }
