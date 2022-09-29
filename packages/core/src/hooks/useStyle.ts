@@ -33,7 +33,7 @@ const TLCSS = css`
     --tl-scale: calc(1 / var(--tl-zoom));
     --tl-padding: calc(64px * max(1, var(--tl-scale)));
 
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;

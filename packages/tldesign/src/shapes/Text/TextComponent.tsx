@@ -1,6 +1,5 @@
 import { TEXT_SHAPE_PADDING } from '@/constance'
 import { TextShape } from '@/types'
-import { CSSProperties, styled } from '@stitches/react'
 import {
   DEFAULT_EVENT,
   HtmlContainer,
@@ -11,12 +10,13 @@ import { ContentEditable, ContentEditableChangeEvent } from './ContentEditable'
 import { Text } from '..'
 import Vec from '@tldesign/vec'
 import React from 'react'
+import styled, { CSSProperties } from 'styled-components'
 
-const Wrapper = styled('div', {
-  width: '100%',
-  height: '100%',
-  pointerEvents: 'all'
-})
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  pointer-events: all;
+`
 
 export const TextComponent = TLShapeUtil.Component<TextShape, HTMLDivElement>(
   ({ shape, events, isEditing, onShapeChange }, ref) => {

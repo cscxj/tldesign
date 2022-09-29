@@ -11,10 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@stitches/react": "^1.2.8",
     "@tldesign/core": "workspace:*",
     "@tldesign/intersect": "workspace:*",
     "@tldesign/vec": "workspace:*",
+    "antd": "^4.23.3",
+    "styled-components": "^5.3.6",
     "zustand": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.26"
   }
 }

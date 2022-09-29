@@ -1,17 +1,17 @@
 import { ImageShape } from '@/types'
-import { styled } from '@stitches/react'
 import { HtmlContainer, TLShapeUtil } from '@tldesign/core'
+import styled from 'styled-components'
 
-const Wrapper = styled('div', {
-  pointerEvents: 'all',
-  width: '100%',
-  height: '100%',
-  position: 'relative',
+const Wrapper = styled.div`
+  pointer-events: all;
+  width: 100%;
+  height: 100%;
+  position: relative;
 
-  img: {
-    userSelect: 'none'
+  img {
+    user-select: none;
   }
-})
+`
 
 export const ImageComponent = TLShapeUtil.Component<ImageShape, HTMLDivElement>(
   ({ shape, events }, ref) => {
