@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@radix-ui/react-icons": "^1.1.1",
     "@tldesign/core": "workspace:*",
     "@tldesign/intersect": "workspace:*",
     "@tldesign/vec": "workspace:*",

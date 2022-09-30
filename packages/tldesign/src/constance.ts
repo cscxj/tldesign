@@ -3,6 +3,8 @@ import { DefaultTheme } from 'styled-components'
 export const DEAD_ZONE = 3
 export const TEXT_SHAPE_PADDING = 4
 
+export const ZOOM_GRADIENT = 25
+
 // 图像到工作区的外边距
 export const PAGE_MARGIN = 40
 
@@ -31,5 +33,9 @@ export const DEFAULT_THEME: DefaultTheme = {
   },
   border: {
     base: '1px solid #eef2f8'
+  },
+  shadow: {
+    base: `0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05)`
   }
 }

@@ -6,6 +6,7 @@ type TlMainProps = React.PropsWithChildren
 const StyledMain = styled.div`
   flex-grow: 1;
   height: 100%;
+  position: relative;
 `
 
 export function TlMain({ children }: TlMainProps) {

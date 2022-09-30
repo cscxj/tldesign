@@ -41,7 +41,7 @@ export function TlEditor() {
         onPointPage={app.onPointPage}
         // other
         onShapeChange={app.onShapeChange}
-        onResize={app.zoomToFill}
+        onResize={app.onScreenResize}
       ></Editor>
     </StyledEditor>
   )

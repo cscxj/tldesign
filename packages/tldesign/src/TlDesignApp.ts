@@ -51,6 +51,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   ctrlKey = false
   spaceKey = false
 
+  screen: Point = [0, 0]
+
   constructor() {
     super(TlDesignApp.defaultState)
   }
@@ -91,6 +93,10 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     return Object.values(this.page.shapes)
   }
 
+  get zoom(): number {
+    return this.pageState.camera.zoom
+  }
+
   /**
    * 获取指定页面的状态
    * @param pageId
@@ -127,6 +133,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     const pageElm = document.getElementById(`tl-page-${this.currentPageId}`)
     const { x, y } = pageElm!.getBoundingClientRect()
     return Vec.sub(point, [x, y])
+  }
+
+  /**
+   * 缩放
+   * @param id
+   */
+  zoomTo(next: number) {
+    return this.setCamera(next, `zoomed_camera`)
   }
 
   setHoveredId(id?: string) {
@@ -544,15 +558,19 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   /**
    * 缩放到填充编辑器区域
-   *
    */
-  zoomToFill = (size: Point) => {
-    const [width, height] = size.map((len) => len - PAGE_MARGIN * 2)
+  zoomToFill = () => {
+    const [width, height] = this.screen.map((len) => len - PAGE_MARGIN * 2)
     const [pageWidth, pageHeight] = this.page.size
 
     const zoomX = width / pageWidth
     const zoomY = height / pageHeight
     this.setCamera(Math.min(1, zoomX, zoomY), 'zoomed_fill')
+  }
+
+  onScreenResize = (size: Point) => {
+    this.screen = size
+    this.zoomToFill()
   }
 
   static defaultState: TDSnapshot = {

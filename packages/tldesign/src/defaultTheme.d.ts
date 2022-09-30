@@ -31,5 +31,9 @@ declare module 'styled-components' {
     border: {
       base: string
     }
+
+    shadow: {
+      base: string
+    }
   }
 }

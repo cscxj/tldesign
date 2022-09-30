@@ -94,7 +94,7 @@ importers:
 
   packages/tldesign:
     specifiers:
-      '@stitches/react': ^1.2.8
+      '@radix-ui/react-icons': ^1.1.1
       '@tldesign/core': workspace:*
       '@tldesign/intersect': workspace:*
       '@tldesign/vec': workspace:*
@@ -103,7 +103,7 @@ importers:
       styled-components: ^5.3.6
       zustand: ^4.1.1
     dependencies:
-      '@stitches/react': 1.2.8
+      '@radix-ui/react-icons': 1.1.1
       '@tldesign/core': link:../core
       '@tldesign/intersect': link:../intersect
       '@tldesign/vec': link:../vec
@@ -730,10 +730,10 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@stitches/react/1.2.8:
-    resolution: {integrity: sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==}
+  /@radix-ui/react-icons/1.1.1:
+    resolution: {integrity: sha512-xc3wQC59rsFylVbSusQCrrM+6695ppF730Q6yqzhRdqDcRNWIm2R6ngpzBoSOQMcwnq4p805F+Gr7xo4fmtN1A==}
     peerDependencies:
-      react: '>= 16.3.0'
+      react: ^16.x || ^17.x || ^18.x
     dev: false
 
   /@testing-library/user-event/14.4.3:

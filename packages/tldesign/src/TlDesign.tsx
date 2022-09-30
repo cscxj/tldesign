@@ -1,10 +1,38 @@
-import { ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import React from 'react'
 import { TlDesignContext } from './hooks/useTlDesignApp'
 import { TlLayout } from './layout'
 import { TlDesignApp } from './TlDesignApp'
 import { DEFAULT_THEME } from './constance'
 import { TlEditor } from './TlEditor'
+import { Toolbar } from './components/Toolbar'
+import 'antd/dist/antd.css'
+
+const ToolbarWrapper = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+`
+
+const GlobalStyles = createGlobalStyle`
+  ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+  }
+
+  ::-webkit-scrollbar-corner {
+      display: none;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background: rgba(0,0,0,.3);
+  }
+
+  ::-webkit-scrollbar-track {
+      background-color: transparent;
+  }
+`
 
 export function TlDesign() {
   const [app] = React.useState(() => new TlDesignApp())
@@ -20,7 +48,11 @@ export function TlDesign() {
           toolsPanel={'toolsPanel'}
         >
           <TlEditor></TlEditor>
+          <ToolbarWrapper>
+            <Toolbar></Toolbar>
+          </ToolbarWrapper>
         </TlLayout>
+        <GlobalStyles></GlobalStyles>
       </ThemeProvider>
     </TlDesignContext.Provider>
   )

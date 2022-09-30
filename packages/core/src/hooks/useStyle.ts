@@ -34,11 +34,16 @@ const TLCSS = css`
     height: 100%;
   }
 
-  .tl-canvas .tl-page-wrap {
+  .tl-canvas-screen {
     position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    padding: 40px;
   }
 
   .tl-page {
+    margin: 0 auto;
     --tl-zoom: 1;
     --tl-scale: calc(1 / var(--tl-zoom));
     --tl-padding: calc(64px * max(1, var(--tl-scale)));

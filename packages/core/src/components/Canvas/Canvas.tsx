@@ -17,28 +17,34 @@ export function Canvas({ page, pageState, id }: CanvasProps) {
   useGlobalEvents()
   const events = useCanvasEvents()
 
-  const [canvasSize, updateCanvasSize] = React.useState<Point>([0, 0])
+  const [screen, updateScreen] = React.useState<Point>([0, 0])
 
   const { callbacks } = useRendererContext()
   const { targetRef } = useSizeObserver((size) => {
-    updateCanvasSize(size)
+    console.log('change', size)
+
+    updateScreen(size)
     callbacks.onResize?.(size)
   })
 
   // 页面中点在画布中的位置
-  const pageCenter = Vec.div(canvasSize, 2)
+  const pageCenter = Vec.div(screen, 2)
 
-  // 页面在画布中的位置
-  const [left, top] = Vec.sub(
-    pageCenter,
-    Vec.mul(page.size, pageState.camera.zoom / 2)
+  // 上边距
+  const top = Math.max(
+    40,
+    pageCenter[1] - (page.size[1] * pageState.camera.zoom) / 2
   )
 
   return (
     <div className="tl-canvas" {...events} ref={targetRef}>
       <div
-        className="tl-page-wrap"
-        style={{ left: `${left}px`, top: `${top}px` }}
+        className="tl-canvas-screen"
+        style={{
+          width: `${screen[0]}px`,
+          height: `${screen[1]}px`,
+          paddingTop: `${top}px`
+        }}
       >
         <Page id={id} page={page} pageState={pageState}></Page>
       </div>
