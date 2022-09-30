@@ -1,3 +1,4 @@
+import { SideDrawer } from './SideDrawer'
 import styled from 'styled-components'
 import { TlHeader } from './Header'
 import { TlMain } from './Main'
@@ -33,6 +34,7 @@ export function TlLayout({
       <TlHeader>{header}</TlHeader>
       <StyledBody>
         <TlSideBar>{sidebar}</TlSideBar>
+        <SideDrawer></SideDrawer>
         <TlMain>{children}</TlMain>
         <TlToolsPanel>{toolsPanel}</TlToolsPanel>
       </StyledBody>

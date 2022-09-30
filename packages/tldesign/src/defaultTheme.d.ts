@@ -35,5 +35,11 @@ declare module 'styled-components' {
     shadow: {
       base: string
     }
+
+    animDuration: {
+      slow: string
+      base: string
+      fast: string
+    }
   }
 }

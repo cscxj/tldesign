@@ -21,8 +21,6 @@ export function Canvas({ page, pageState, id }: CanvasProps) {
 
   const { callbacks } = useRendererContext()
   const { targetRef } = useSizeObserver((size) => {
-    console.log('change', size)
-
     updateScreen(size)
     callbacks.onResize?.(size)
   })
@@ -37,7 +35,7 @@ export function Canvas({ page, pageState, id }: CanvasProps) {
   )
 
   return (
-    <div className="tl-canvas" {...events} ref={targetRef}>
+    <div className="tl-canvas" ref={targetRef}>
       <div
         className="tl-canvas-screen"
         style={{
@@ -45,6 +43,7 @@ export function Canvas({ page, pageState, id }: CanvasProps) {
           height: `${screen[1]}px`,
           paddingTop: `${top}px`
         }}
+        {...events}
       >
         <Page id={id} page={page} pageState={pageState}></Page>
       </div>
