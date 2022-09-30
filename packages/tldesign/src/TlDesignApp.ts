@@ -1,6 +1,5 @@
 import {
   Point,
-  TLBounds,
   TLBoundsEventHandler,
   TLBoundsHandleEventHandler,
   TLCanvasEventHandler,
@@ -9,8 +8,7 @@ import {
   TLPointerEventHandler,
   TLScaleHandle,
   TLShapeChangeHandler,
-  TLShapeEventsHandler,
-  Utils
+  TLShapeEventsHandler
 } from '@tldesign/core'
 import { DEAD_ZONE, PAGE_MARGIN } from './constance'
 import { getSession, SessionArgsOfType, TDSession } from './sessions'
@@ -53,14 +51,6 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   ctrlKey = false
   spaceKey = false
 
-  /**
-   * 编辑器相对于屏幕的位置
-   */
-  editorBounds: TLBounds = Utils.getBoundsFromPoints([
-    [0, 0],
-    [100, 100]
-  ])
-
   constructor() {
     super(TlDesignApp.defaultState)
   }
@@ -101,19 +91,6 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     return Object.values(this.page.shapes)
   }
 
-  // 当前页面相对于编辑器的位置（页面的中心始终和编辑器的中心重合）
-  get pageStartPoint(): Point {
-    const pageCenter = Vec.div(
-      [this.editorBounds.width, this.editorBounds.height],
-      2
-    )
-
-    return Vec.sub(
-      pageCenter,
-      Vec.mul(this.page.size, this.pageState.camera.zoom / 2)
-    )
-  }
-
   /**
    * 获取指定页面的状态
    * @param pageId
@@ -147,17 +124,9 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
    * 获取屏幕上的点在页面上的坐标
    */
   getPagePoint(point: Point): Point {
-    const a = Vec.div(
-      Vec.sub(
-        point,
-        Vec.add(
-          [this.editorBounds.minX, this.editorBounds.minY],
-          this.pageStartPoint
-        )
-      ),
-      this.pageState.camera.zoom
-    )
-    return a
+    const pageElm = document.getElementById(`tl-page-${this.currentPageId}`)
+    const { x, y } = pageElm!.getBoundingClientRect()
+    return Vec.sub(point, [x, y])
   }
 
   setHoveredId(id?: string) {
@@ -584,20 +553,6 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     const zoomX = width / pageWidth
     const zoomY = height / pageHeight
     this.setCamera(Math.min(1, zoomX, zoomY), 'zoomed_fill')
-  }
-
-  /**
-   * 更新编辑器位置大小信息
-   */
-  updateEditorBounds([minX, minY]: Point, [width, height]: Point) {
-    this.editorBounds = {
-      minX,
-      minY,
-      maxX: minX + width,
-      maxY: minY + height,
-      width,
-      height
-    }
   }
 
   static defaultState: TDSnapshot = {

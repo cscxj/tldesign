@@ -30,6 +30,7 @@ export const Page = ({ page, pageState }: PageProps) => {
 
   return (
     <div
+      id={`tl-page-${page.id}`}
       className="tl-page"
       style={{ width: `${width}px`, height: `${height}px` }}
       {...events}
