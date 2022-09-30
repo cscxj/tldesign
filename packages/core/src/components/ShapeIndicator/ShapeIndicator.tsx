@@ -1,15 +1,17 @@
 import { useRendererContext } from '@/hooks/useRendererContext'
 import { TLShape } from '@/types'
+import { Utils } from '@/utils'
 import { Container } from '../Container'
 
 interface ShapeIndicatorProps {
   shape: TLShape
+  zoom: number
 }
 
-export const ShapeIndicator = ({ shape }: ShapeIndicatorProps) => {
+export const ShapeIndicator = ({ shape, zoom }: ShapeIndicatorProps) => {
   const { shapeUtils } = useRendererContext()
   const util = shapeUtils[shape.type]
-  const bounds = util.getBounds(shape)
+  const bounds = Utils.getZoomBounds(util.getBounds(shape), zoom)
 
   const { width, height } = bounds
   return (

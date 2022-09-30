@@ -3,6 +3,7 @@ import { useRendererContext } from '@/hooks/useRendererContext'
 import { useSelection } from '@/hooks/useSelection'
 import { useShapeTree } from '@/hooks/useShapeTree'
 import { TLPage, TLPageState } from '@/types'
+import { Utils } from '@/utils'
 import { Bounds } from '../Bounds'
 import { BoundsBg } from '../Bounds/BoundsBg'
 import { Brush } from '../Brush'
@@ -16,12 +17,15 @@ interface PageProps {
 }
 
 export const Page = ({ page, pageState }: PageProps) => {
-  const width = page.size[0] * pageState.camera.zoom
-  const height = page.size[1] * pageState.camera.zoom
+  const { zoom } = pageState.camera
+
+  const width = page.size[0] * zoom
+  const height = page.size[1] * zoom
   const events = usePageEvents()
 
   const { shapeUtils } = useRendererContext()
   const { bounds } = useSelection(page, pageState, shapeUtils)
+  const zoomedBounds = bounds ? Utils.getZoomBounds(bounds, zoom) : bounds
 
   const { hoveredId, selectedIds } = pageState
   const selectShapes = selectedIds.map((id) => page.shapes[id])
@@ -35,13 +39,13 @@ export const Page = ({ page, pageState }: PageProps) => {
       style={{ width: `${width}px`, height: `${height}px` }}
       {...events}
     >
-      {bounds && <BoundsBg bounds={bounds} />}
+      {zoomedBounds && <BoundsBg bounds={zoomedBounds} />}
       <div
         className="tl-page-content"
         style={{
           width: `${page.size[0]}px`,
           height: `${page.size[1]}px`,
-          transform: `scale(${pageState.camera.zoom})`
+          transform: `scale(${zoom})`
         }}
       >
         {shapeTree.map((node) => (
@@ -53,10 +57,16 @@ export const Page = ({ page, pageState }: PageProps) => {
         ))}
       </div>
       {selectShapes.map((shape) => (
-        <ShapeIndicator shape={shape} key={'selected_' + shape.id} />
+        <ShapeIndicator
+          zoom={zoom}
+          shape={shape}
+          key={'selected_' + shape.id}
+        />
       ))}
-      {hoveredId && <ShapeIndicator shape={page.shapes[hoveredId]} />}
-      {bounds && <Bounds bounds={bounds} />}
+      {hoveredId && (
+        <ShapeIndicator zoom={zoom} shape={page.shapes[hoveredId]} />
+      )}
+      {zoomedBounds && <Bounds bounds={zoomedBounds} />}
       {pageState.brush && <Brush brush={pageState.brush} />}
     </div>
   )

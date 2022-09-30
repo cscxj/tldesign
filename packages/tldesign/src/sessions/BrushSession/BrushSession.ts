@@ -46,12 +46,20 @@ export class BrushSession extends BaseSession {
   update = (): TlDesignPatch | undefined => {
     const {
       initialSelectedIds,
-      app: { originPoint, currentPoint }
+      app: {
+        originPoint,
+        currentPoint,
+        pageState: {
+          camera: { zoom }
+        }
+      }
     } = this
 
     const hits = new Set<string>()
 
     const brush = Utils.getBoundsFromPoints([originPoint, currentPoint])
+
+    const actualBrush: TLBounds = Utils.getZoomBounds(brush, 1 / zoom)
 
     const selectedIds = new Set(initialSelectedIds)
     // 捕捉框选范围内的图形
@@ -60,7 +68,7 @@ export class BrushSession extends BaseSession {
 
       if (!hits.has(selectId)) {
         const util = this.app.getShapeUtil(shape)
-        if (util.hitTestBounds(shape, brush)) {
+        if (util.hitTestBounds(shape, actualBrush)) {
           hits.add(selectId)
           if (!selectedIds.has(selectId)) {
             selectedIds.add(selectId)

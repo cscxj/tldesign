@@ -146,3 +146,17 @@ export function getRotatedBounds(
     rotation: nextRotation
   }
 }
+
+/**
+ * 获取缩放后的bounds
+ */
+export function getZoomBounds(bounds: TLBounds, zoom: number) {
+  return <TLBounds>{
+    minX: bounds.minX * zoom,
+    minY: bounds.minY * zoom,
+    maxX: bounds.maxX * zoom,
+    maxY: bounds.maxY * zoom,
+    height: bounds.height * zoom,
+    width: bounds.width * zoom
+  }
+}
