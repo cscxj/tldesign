@@ -36,7 +36,14 @@ export const Page = ({ page, pageState }: PageProps) => {
       {...events}
     >
       {bounds && <BoundsBg bounds={bounds} />}
-      <div className="tl-page-content">
+      <div
+        className="tl-page-content"
+        style={{
+          width: `${page.size[0]}px`,
+          height: `${page.size[1]}px`,
+          transform: `scale(${pageState.camera.zoom})`
+        }}
+      >
         {shapeTree.map((node) => (
           <ShapeNode
             key={node.shape.id}
