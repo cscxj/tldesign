@@ -3,6 +3,9 @@ import { DefaultTheme } from 'styled-components'
 export const DEAD_ZONE = 3
 export const TEXT_SHAPE_PADDING = 4
 
+// 图像到工作区的外边距
+export const PAGE_MARGIN = 40
+
 export const DEFAULT_THEME: DefaultTheme = {
   color: {
     primary: '#1890ff',

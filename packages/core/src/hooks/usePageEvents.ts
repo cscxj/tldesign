@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRendererContext } from './useRendererContext'
 
-export function useCanvasEvents() {
+export function usePageEvents() {
   const { callbacks, inputs } = useRendererContext()
 
   return React.useMemo(() => {
@@ -9,35 +9,33 @@ export function useCanvasEvents() {
       onPointerDown: (e: React.PointerEvent) => {
         e.stopPropagation()
         e.currentTarget.setPointerCapture(e.pointerId)
-        const info = inputs.pointerDown(e, 'canvas')
+        const info = inputs.pointerDown(e, 'page')
         if (e.button === 0 || e.button === 1) {
-          callbacks.onPointCanvas?.(info)
+          callbacks.onPointPage?.(info)
           callbacks.onPointerDown?.(info)
         }
       },
       onPointerMove: (e: React.PointerEvent) => {
         e.stopPropagation()
-        const info = inputs.pointerMove(e, 'canvas')
+        const info = inputs.pointerMove(e, 'page')
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-          callbacks.onDragCanvas?.(info)
+          callbacks.onDragPage?.(info)
         }
         callbacks.onPointerMove?.(info)
       },
       onPointerUp: (e: React.PointerEvent) => {
         e.stopPropagation()
         const isDoubleClick = inputs.isDoubleClick()
-        const info = inputs.pointerUp(e, 'canvas')
+        const info = inputs.pointerUp(e, 'page')
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           e.currentTarget?.releasePointerCapture(e.pointerId)
         }
         if (isDoubleClick && !(info.altKey || info.metaKey)) {
-          callbacks.onDoubleClickCanvas?.(info)
+          callbacks.onDoubleClickPage?.(info)
         }
-        callbacks.onReleaseCanvas?.(info)
+        callbacks.onReleasePage?.(info)
         callbacks.onPointerUp?.(info)
-      },
-      onDrop: callbacks.onDrop,
-      onDragOver: callbacks.onDragOver
+      }
     }
   }, [callbacks, inputs])
 }

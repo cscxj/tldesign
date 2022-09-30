@@ -3,7 +3,7 @@ import { TLShapeEvents } from '..'
 import { useRendererContext } from './useRendererContext'
 
 export function useShapeEvents(id: string): TLShapeEvents<Element> {
-  const { inputs, events } = useRendererContext()
+  const { inputs, callbacks } = useRendererContext()
 
   return React.useMemo(
     () => ({
@@ -11,13 +11,13 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
         e.stopPropagation()
         const info = inputs.pointerDown(e, id)
         if (e.button === 2) {
-          events.onRightPointShape?.(info)
+          callbacks.onRightPointShape?.(info)
           return
         }
         e.currentTarget.setPointerCapture(e.pointerId)
-        events.onPointBounds?.(inputs.pointerDown(e, 'bounds'))
-        events.onPointShape?.(info)
-        events.onPointerDown?.(info)
+        callbacks.onPointBounds?.(inputs.pointerDown(e, 'bounds'))
+        callbacks.onPointShape?.(info)
+        callbacks.onPointerDown?.(info)
       },
       onPointerUp(e) {
         e.stopPropagation()
@@ -27,26 +27,26 @@ export function useShapeEvents(id: string): TLShapeEvents<Element> {
           e.currentTarget.releasePointerCapture(e.pointerId)
         }
         if (isDoubleClick && !(info.altKey || info.metaKey)) {
-          events.onDoubleClickShape?.(info)
+          callbacks.onDoubleClickShape?.(info)
         }
-        events.onReleaseShape?.(info)
-        events.onPointerUp?.(info)
+        callbacks.onReleaseShape?.(info)
+        callbacks.onPointerUp?.(info)
       },
       onPointerMove(e) {
         e.stopPropagation()
         const info = inputs.pointerMove(e, id)
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-          events.onDragShape?.(info)
+          callbacks.onDragShape?.(info)
         }
-        events.onPointerMove?.(info)
+        callbacks.onPointerMove?.(info)
       },
       onPointerEnter(e) {
         const info = inputs.pointerEnter(e, id)
-        events.onHoverShape?.(info)
+        callbacks.onHoverShape?.(info)
       },
       onPointerLeave(e) {
         const info = inputs.pointerEnter(e, id)
-        events.onUnHoverShape?.(info)
+        callbacks.onUnHoverShape?.(info)
       }
     }),
     []

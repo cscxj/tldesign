@@ -1,13 +1,11 @@
 import { useCanvasEvents } from '@/hooks/useCanvasEvents'
 import { useGlobalEvents } from '@/hooks/useGlobalEvents'
 import { useRendererContext } from '@/hooks/useRendererContext'
-import { useSelection } from '@/hooks/useSelection'
+import { useSizeObserver } from '@/hooks/useSizeObserver'
 import { TLPage, TLPageState } from '@/types'
-import { Bounds } from '../Bounds'
-import { BoundsBg } from '../Bounds/BoundsBg'
-import { Brush } from '../Brush'
-import { Page } from '../Page/Page'
-import { ShapeIndicator } from '../ShapeIndicator'
+import React from 'react'
+import { Page } from '../Page'
+import Vec, { Point } from '@tldesign/vec'
 
 interface CanvasProps {
   id?: string
@@ -15,31 +13,35 @@ interface CanvasProps {
   pageState: TLPageState
 }
 
-export const Canvas = ({ page, pageState }: CanvasProps) => {
+export function Canvas({ page, pageState, id }: CanvasProps) {
   useGlobalEvents()
   const events = useCanvasEvents()
 
-  const { shapeUtils } = useRendererContext()
-  const { bounds } = useSelection(page, pageState, shapeUtils)
+  const [canvasSize, updateCanvasSize] = React.useState<Point>([0, 0])
 
-  const { hoveredId, selectedIds } = pageState
-  const selectShapes = selectedIds.map((id) => page.shapes[id])
+  const { callbacks } = useRendererContext()
+  const { targetRef } = useSizeObserver((size) => {
+    updateCanvasSize(size)
+    callbacks.onResize?.(size)
+  })
+
+  // 页面中点在画布中的位置
+  const pageCenter = Vec.div(canvasSize, 2)
+
+  // 页面在画布中的位置
+  const [left, top] = Vec.sub(
+    pageCenter,
+    Vec.mul(page.size, pageState.camera.zoom / 2)
+  )
 
   return (
-    <div
-      className="tl-canvas"
-      {...events}
-      style={{ width: `${page.size[0]}px`, height: `${page.size[1]}px` }}
-    >
-      {bounds && <BoundsBg bounds={bounds} />}
-      <Page page={page} pageState={pageState}></Page>
-      {selectShapes.map((shape) => (
-        <ShapeIndicator shape={shape} key={'selected_' + shape.id} />
-      ))}
-      {hoveredId && <ShapeIndicator shape={page.shapes[hoveredId]} />}
-      {bounds && <Bounds bounds={bounds} />}
-
-      {pageState.brush && <Brush brush={pageState.brush} />}
+    <div className="tl-canvas" {...events} ref={targetRef}>
+      <div
+        className="tl-page-wrap"
+        style={{ left: `${left}px`, top: `${top}px` }}
+      >
+        <Page id={id} page={page} pageState={pageState}></Page>
+      </div>
     </div>
   )
 }

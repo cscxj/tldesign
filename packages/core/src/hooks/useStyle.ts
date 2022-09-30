@@ -29,28 +29,34 @@ const defaultTheme: TLTheme = {
 
 const TLCSS = css`
   .tl-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tl-canvas .tl-page-wrap {
+    position: absolute;
+  }
+
+  .tl-page {
     --tl-zoom: 1;
     --tl-scale: calc(1 / var(--tl-zoom));
     --tl-padding: calc(64px * max(1, var(--tl-scale)));
 
+    background-color: #ffffff;
     position: relative;
-    top: 0;
-    left: 0;
+    box-sizing: border-box;
+  }
+
+  .tl-page * {
+    box-sizing: border-box;
+  }
+
+  .tl-page-content {
+    position: relative;
     width: 100%;
     height: 100%;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    background-color: #ffffff;
-    box-sizing: border-box;
-  }
-
-  .tl-canvas * {
-    box-sizing: border-box;
-  }
-
-  .tl-page {
-    background-color: #ffffff;
+    overflow: hidden;
   }
 
   .tl-container {
@@ -92,8 +98,6 @@ const TLCSS = css`
   }
 
   .tl-bounds-bg {
-    stroke: var(--tl-selectStroke);
-    stroke-width: calc(2px * var(--tl-scale));
     fill: var(--tl-selectFill);
     pointer-events: all;
     contain: layout style size;
@@ -101,7 +105,7 @@ const TLCSS = css`
 
   .tl-indicator {
     stroke: var(--tl-selectStroke);
-    stroke-width: calc(0.5px * var(--tl-scale));
+    stroke-width: calc(1px * var(--tl-scale));
   }
 
   .tl-scale-handle {

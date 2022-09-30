@@ -2,21 +2,21 @@ import * as React from 'react'
 import { useRendererContext } from './useRendererContext'
 
 export function useBoundsEvents() {
-  const { events, inputs } = useRendererContext()
+  const { callbacks, inputs } = useRendererContext()
 
   return React.useMemo(() => {
     return {
       onPointerDown: (e: React.PointerEvent) => {
         e.stopPropagation()
         if (e.button === 2) {
-          events.onRightPointBounds?.(inputs.pointerDown(e, 'bounds'))
+          callbacks.onRightPointBounds?.(inputs.pointerDown(e, 'bounds'))
           return
         }
         if (e.button !== 0) return
         e.currentTarget?.setPointerCapture(e.pointerId)
         const info = inputs.pointerDown(e, 'bounds')
-        events.onPointBounds?.(info)
-        events.onPointerDown?.(info)
+        callbacks.onPointBounds?.(info)
+        callbacks.onPointerDown?.(info)
       },
       onPointerUp: (e: React.PointerEvent) => {
         e.stopPropagation()
@@ -28,25 +28,25 @@ export function useBoundsEvents() {
           e.currentTarget?.releasePointerCapture(e.pointerId)
         }
         if (isDoubleClick && !(info.altKey || info.metaKey)) {
-          events.onDoubleClickBounds?.(info)
+          callbacks.onDoubleClickBounds?.(info)
         }
-        events.onReleaseBounds?.(info)
-        events.onPointerUp?.(info)
+        callbacks.onReleaseBounds?.(info)
+        callbacks.onPointerUp?.(info)
       },
       onPointerMove: (e: React.PointerEvent) => {
         e.stopPropagation()
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-          events.onDragBounds?.(inputs.pointerMove(e, 'bounds'))
+          callbacks.onDragBounds?.(inputs.pointerMove(e, 'bounds'))
         }
         const info = inputs.pointerMove(e, 'bounds')
-        events.onPointerMove?.(info)
+        callbacks.onPointerMove?.(info)
       },
       onPointerEnter: (e: React.PointerEvent) => {
-        events.onHoverBounds?.(inputs.pointerEnter(e, 'bounds'))
+        callbacks.onHoverBounds?.(inputs.pointerEnter(e, 'bounds'))
       },
       onPointerLeave: (e: React.PointerEvent) => {
-        events.onUnHoverBounds?.(inputs.pointerEnter(e, 'bounds'))
+        callbacks.onUnHoverBounds?.(inputs.pointerEnter(e, 'bounds'))
       }
     }
-  }, [inputs, events])
+  }, [inputs, callbacks])
 }

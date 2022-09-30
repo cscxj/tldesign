@@ -2,27 +2,27 @@ import React from 'react'
 import { useRendererContext } from './useRendererContext'
 
 export function useGlobalEvents() {
-  const { events, inputs } = useRendererContext()
+  const { callbacks, inputs } = useRendererContext()
 
   React.useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
       e.stopPropagation()
       const info = inputs.pointerDown(e, 'global')
       if (e.button === 0 || e.button === 1) {
-        events.onPointerDown?.(info)
+        callbacks.onPointerDown?.(info)
       }
     }
 
     const onPointerMove = (e: PointerEvent) => {
       e.stopPropagation()
       const info = inputs.pointerMove(e, 'global')
-      events.onPointerMove?.(info)
+      callbacks.onPointerMove?.(info)
     }
 
     const onPointerUp = (e: PointerEvent) => {
       e.stopPropagation()
       const info = inputs.pointerUp(e, 'global')
-      events.onPointerUp?.(info)
+      callbacks.onPointerUp?.(info)
     }
 
     document.addEventListener('pointerdown', onPointerDown)

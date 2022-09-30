@@ -11,7 +11,7 @@ interface ShapeProps extends Omit<IShapeTreeNode, 'children'> {
 export const Shape = function Shape({ util, shape, ...rest }: ShapeProps) {
   const events = useShapeEvents(shape.id)
 
-  const context = useRendererContext()
+  const { callbacks } = useRendererContext()
 
   const bounds = util.getBounds(shape)
 
@@ -22,7 +22,7 @@ export const Shape = function Shape({ util, shape, ...rest }: ShapeProps) {
         shape={shape}
         events={events}
         {...rest}
-        onShapeChange={context.events.onShapeChange}
+        onShapeChange={callbacks.onShapeChange}
       ></RenderedShape>
     </Container>
   )

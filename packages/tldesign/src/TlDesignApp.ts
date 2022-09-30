@@ -1,5 +1,6 @@
 import {
   Point,
+  TLBounds,
   TLBoundsEventHandler,
   TLBoundsHandleEventHandler,
   TLCanvasEventHandler,
@@ -7,9 +8,10 @@ import {
   TLPointerEventHandler,
   TLScaleHandle,
   TLShapeChangeHandler,
-  TLShapeEventsHandler
+  TLShapeEventsHandler,
+  Utils
 } from '@tldesign/core'
-import { DEAD_ZONE } from './constance'
+import { DEAD_ZONE, PAGE_MARGIN } from './constance'
 import { getSession, SessionArgsOfType, TDSession } from './sessions'
 import { getShapeUtil } from './shapes'
 import { StateManager } from './StateManager/StateManager'
@@ -49,6 +51,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   metaKey = false
   ctrlKey = false
   spaceKey = false
+
+  /**
+   * 编辑器相对于屏幕的位置
+   */
+  editorBounds: TLBounds = Utils.getBoundsFromPoints([
+    [0, 0],
+    [100, 100]
+  ])
 
   constructor() {
     super(TlDesignApp.defaultState)
@@ -90,6 +100,19 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
     return Object.values(this.page.shapes)
   }
 
+  // 当前页面相对于编辑器的位置（页面的中心始终和编辑器的中心重合）
+  get pageStartPoint(): Point {
+    const pageCenter = Vec.div(
+      [this.editorBounds.width, this.editorBounds.height],
+      2
+    )
+
+    return Vec.sub(
+      pageCenter,
+      Vec.mul(this.page.size, this.pageState.camera.zoom / 2)
+    )
+  }
+
   /**
    * 获取指定页面的状态
    * @param pageId
@@ -122,9 +145,18 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   /**
    * 获取屏幕上的点在页面上的坐标
    */
-  getPagePoint(point: Point, pageId = this.currentPageId): Point {
-    const { camera } = this.getPageState(pageId)
-    return Vec.sub(Vec.div(point, camera.zoom), camera.point)
+  getPagePoint(point: Point): Point {
+    const a = Vec.div(
+      Vec.sub(
+        point,
+        Vec.add(
+          [this.editorBounds.minX, this.editorBounds.minY],
+          this.pageStartPoint
+        )
+      ),
+      this.pageState.camera.zoom
+    )
+    return a
   }
 
   setHoveredId(id?: string) {
@@ -155,6 +187,20 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
       },
       `set_editing_id`
     )
+  }
+
+  setCamera = (zoom: number, reason: string): this => {
+    this.patchState(
+      {
+        document: {
+          pageStates: {
+            [this.currentPageId]: { camera: { zoom } }
+          }
+        }
+      },
+      reason
+    )
+    return this
   }
 
   /**
@@ -431,7 +477,6 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   // canvas events
-
   onPointCanvas: TLCanvasEventHandler = (info) => {
     this.updateInputs(info)
     this.selectNone()
@@ -516,6 +561,33 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   }
 
   /** ---------------------- session end ------------------------------ */
+
+  /**
+   * 缩放到填充编辑器区域
+   *
+   */
+  zoomToFill = (size: Point) => {
+    const [width, height] = size.map((len) => len - PAGE_MARGIN * 2)
+    const [pageWidth, pageHeight] = this.page.size
+
+    const zoomX = width / pageWidth
+    const zoomY = height / pageHeight
+    this.setCamera(Math.min(1, zoomX, zoomY), 'zoomed_fill')
+  }
+
+  /**
+   * 更新编辑器位置大小信息
+   */
+  updateEditorBounds([minX, minY]: Point, [width, height]: Point) {
+    this.editorBounds = {
+      minX,
+      minY,
+      maxX: minX + width,
+      maxY: minY + height,
+      width,
+      height
+    }
+  }
 
   static defaultState: TDSnapshot = {
     appState: {

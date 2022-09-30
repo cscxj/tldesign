@@ -127,6 +127,7 @@ export type TLEventTarget = string | number
 
 export type TLPointerEventHandler = (info: TLPointerInfo<TLEventTarget>) => void
 export type TLShapeEventsHandler = (info: TLPointerInfo<string>) => void
+export type TLPageEventHandler = (info: TLPointerInfo<'page'>) => void
 export type TLCanvasEventHandler = (info: TLPointerInfo<'canvas'>) => void
 export type TLBoundsEventHandler = (info: TLPointerInfo<'bounds'>) => void
 export type TLBoundsHandleEventHandler = (
@@ -141,7 +142,9 @@ export type TLShapeChangeHandler<S, K = any> = (
   info?: K
 ) => void
 
-export interface TLEvents<S extends TLShape> {
+export type TlResizeHandler = (size: Point) => void
+
+export interface TLCallbacks<S extends TLShape> {
   // Shape
   onPointShape: TLShapeEventsHandler
   onHoverShape: TLShapeEventsHandler
@@ -169,12 +172,20 @@ export interface TLEvents<S extends TLShape> {
   onUnHoverBoundsHandle: TLBoundsHandleEventHandler
   onReleaseBoundsHandle: TLBoundsHandleEventHandler
 
+  // page
+  onPointPage: TLPageEventHandler
+  onDoubleClickPage: TLPageEventHandler
+  onRightPointPage: TLPageEventHandler
+  onDragPage: TLPageEventHandler
+  onReleasePage: TLPageEventHandler
+
   // canvas
   onPointCanvas: TLCanvasEventHandler
   onDoubleClickCanvas: TLCanvasEventHandler
   onRightPointCanvas: TLCanvasEventHandler
   onDragCanvas: TLCanvasEventHandler
   onReleaseCanvas: TLCanvasEventHandler
+
   onDragOver: TLDropEventHandler
   onDrop: TLDropEventHandler
 
@@ -189,6 +200,7 @@ export interface TLEvents<S extends TLShape> {
 
   // other
   onShapeChange: TLShapeChangeHandler<S, any>
+  onResize: TlResizeHandler
 }
 
 export interface TLShapeEvents<E = any> {

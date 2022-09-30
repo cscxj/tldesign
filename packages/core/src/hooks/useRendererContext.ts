@@ -1,11 +1,11 @@
 import { Inputs } from '@/inputs'
 import { TLShapeUtilsMap } from '@/TLShapeUtil'
-import { TLEvents, TLShape } from '@/types'
+import { TLCallbacks, TLShape } from '@/types'
 import React from 'react'
 
 export interface IRendererContext {
   id?: string
-  events: Partial<TLEvents<TLShape>>
+  callbacks: Partial<TLCallbacks<TLShape>>
   shapeUtils: TLShapeUtilsMap
   inputs: Inputs
 }
