@@ -37,6 +37,8 @@ export function TlEditor() {
         onPointBoundsHandle={app.onPointBoundsHandle}
         // canvas
         onPointCanvas={app.onPointCanvas}
+        // page
+        onPointPage={app.onPointPage}
         // other
         onShapeChange={app.onShapeChange}
         onResize={app.zoomToFill}

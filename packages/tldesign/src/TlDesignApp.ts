@@ -4,6 +4,7 @@ import {
   TLBoundsEventHandler,
   TLBoundsHandleEventHandler,
   TLCanvasEventHandler,
+  TLPageEventHandler,
   TLPageState,
   TLPointerEventHandler,
   TLScaleHandle,
@@ -478,6 +479,16 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   // canvas events
   onPointCanvas: TLCanvasEventHandler = (info) => {
+    this.updateInputs(info)
+    this.selectNone()
+    if (this.editingId) {
+      this.setEditingId(undefined)
+    }
+    this.setStatus(TDStatus.PointingCanvas)
+  }
+
+  // page events
+  onPointPage: TLPageEventHandler = (info) => {
     this.updateInputs(info)
     this.selectNone()
     if (this.editingId) {
