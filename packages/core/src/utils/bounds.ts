@@ -157,6 +157,8 @@ export function getZoomBounds(bounds: TLBounds, zoom: number) {
     maxX: bounds.maxX * zoom,
     maxY: bounds.maxY * zoom,
     height: bounds.height * zoom,
-    width: bounds.width * zoom
+    width: bounds.width * zoom,
+    rotation: bounds.rotation,
+    skew: bounds.skew
   }
 }
