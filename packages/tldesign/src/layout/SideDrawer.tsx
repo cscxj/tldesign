@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { PropsWithChildren, useState } from 'react'
+import { OutlinedArrowIcon } from '@/statefulIcons'
 
 interface SideDrawerProps extends PropsWithChildren {
   open?: boolean
@@ -17,7 +18,9 @@ export function SideDrawer({ open = true, children }: SideDrawerProps) {
       <div className="drawer-content">
         <div className="drawer-inner">{children}</div>
       </div>
-      <div className="drawer-handle" onClick={onClickHandle}></div>
+      <div className="drawer-handle" onClick={onClickHandle}>
+        <OutlinedArrowIcon dir={opened ? 'left' : 'right'}></OutlinedArrowIcon>
+      </div>
     </StyledSideDrawer>
   )
 }
@@ -47,6 +50,9 @@ const StyledSideDrawer = styled.div(({ theme: { animDuration } }) => {
       position: absolute;
       width: 20px;
       height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-top-right-radius: 16px;
       border-bottom-right-radius: 16px;
       cursor: pointer;
