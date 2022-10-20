@@ -8,6 +8,7 @@ import { TlToolsPanel } from './ToolsPanel'
 export type TlLayoutProps = React.PropsWithChildren<{
   header?: React.ReactNode
   sidebar?: React.ReactNode
+  sidePanel?: React.ReactNode
   toolsPanel?: React.ReactNode
 }>
 
@@ -26,6 +27,7 @@ const StyledBody = styled.div`
 export function TlLayout({
   header,
   sidebar,
+  sidePanel,
   toolsPanel,
   children
 }: TlLayoutProps) {
@@ -34,7 +36,7 @@ export function TlLayout({
       <TlHeader>{header}</TlHeader>
       <StyledBody>
         <TlSideBar>{sidebar}</TlSideBar>
-        <SideDrawer></SideDrawer>
+        <SideDrawer>{sidePanel}</SideDrawer>
         <TlMain>{children}</TlMain>
         <TlToolsPanel>{toolsPanel}</TlToolsPanel>
       </StyledBody>

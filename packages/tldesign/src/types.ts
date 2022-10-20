@@ -110,6 +110,7 @@ export interface TDSnapshot {
   appState: {
     currentPageId: string
     status: TDStatus
+    currentSectionName: string
   }
   document: TDDocument
 }

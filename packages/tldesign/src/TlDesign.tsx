@@ -1,3 +1,4 @@
+import 'antd/dist/antd.css'
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import React from 'react'
 import { TlDesignContext } from './hooks/useTlDesignApp'
@@ -6,7 +7,8 @@ import { TlDesignApp } from './TlDesignApp'
 import { DEFAULT_THEME } from './constance'
 import { TlEditor } from './TlEditor'
 import { Toolbar } from './components/Toolbar'
-import 'antd/dist/antd.css'
+import { Sidebar } from './components/Sidebar'
+import { SidePanel } from './components/SidePanel'
 
 const ToolbarWrapper = styled.div`
   position: absolute;
@@ -44,7 +46,8 @@ export function TlDesign() {
       <ThemeProvider theme={DEFAULT_THEME}>
         <TlLayout
           header={app.appState.status}
-          sidebar={'sidebar'}
+          sidebar={<Sidebar></Sidebar>}
+          sidePanel={<SidePanel></SidePanel>}
           toolsPanel={'toolsPanel'}
         >
           <TlEditor></TlEditor>

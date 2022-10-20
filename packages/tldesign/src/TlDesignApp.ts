@@ -25,8 +25,12 @@ import {
 } from './types'
 import { Snapshot } from './utils'
 import Vec from '@tldesign/vec'
+import { BaseSection } from './sections/BaseSection'
+import { defaultSections } from './sections'
 
 export class TlDesignApp extends StateManager<TDSnapshot> {
+  sections: Map<string, BaseSection>
+
   session?: TDSession
   /**
    * 鼠标按下时的位置
@@ -55,6 +59,14 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
 
   constructor() {
     super(TlDesignApp.defaultState)
+    this.sections = new Map(
+      defaultSections.map((section) => [section.name, section])
+    )
+    this.state.appState.currentSectionName = defaultSections[0].name
+  }
+
+  get currentSection() {
+    return this.sections.get(this.state.appState.currentSectionName)
   }
 
   get appState(): TDSnapshot['appState'] {
@@ -141,6 +153,17 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
    */
   zoomTo(next: number) {
     return this.setCamera(next, `zoomed_camera`)
+  }
+
+  selectSection(name: string) {
+    this.patchState(
+      {
+        appState: {
+          currentSectionName: name
+        }
+      },
+      `select_section:${name}`
+    )
   }
 
   setHoveredId(id?: string) {
@@ -576,7 +599,8 @@ export class TlDesignApp extends StateManager<TDSnapshot> {
   static defaultState: TDSnapshot = {
     appState: {
       currentPageId: 'page1',
-      status: TDStatus.Idle
+      status: TDStatus.Idle,
+      currentSectionName: ''
     },
     document: TlDesignApp.defaultDocument
   }
